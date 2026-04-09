@@ -10,7 +10,7 @@ public class EnemySpawner : MonoBehaviour
     public Transform spawnPoint;
 
     [Header("웨이포인트 경로")]
-    public Transform[] wayPoints;
+    public Waypoint waypoint;
 
     [Header("스폰 설정")]
     public int numOfEnemy = 10;
@@ -46,15 +46,9 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy()
     {
-        if (enemyPrefab == null)
+        if (enemyPrefab == null || spawnPoint == null || waypoint == null)
         {
-            Debug.LogError("EnemySpawner: enemyPrefab이 연결되지 않았습니다.");
-            return;
-        }
-
-        if (spawnPoint == null)
-        {
-            Debug.LogError("EnemySpawner: spawnPoint가 연결되지 않았습니다.");
+            Debug.LogError("EnemySpawner: 필요한 오브젝트가 연결되지 않았습니다.");
             return;
         }
 
@@ -64,11 +58,7 @@ public class EnemySpawner : MonoBehaviour
 
         if (enemyMove != null)
         {
-            enemyMove.SetWayPoints(wayPoints);
-        }
-        else
-        {
-            Debug.LogWarning("EnemySpawner: 생성된 적 오브젝트에 EnemyMove 스크립트가 없습니다.");
+            enemyMove.SetWayPoints(waypoint.GetWayPoints());
         }
     }
 }
