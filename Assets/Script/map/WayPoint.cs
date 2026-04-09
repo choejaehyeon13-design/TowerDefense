@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Waypoint : MonoBehaviour
+public class WayPoint : MonoBehaviour
 {
     [Header("웨이포인트 목록")]
     [SerializeField] private Transform[] points;

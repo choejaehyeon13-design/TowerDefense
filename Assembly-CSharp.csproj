@@ -64,14 +64,14 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.62f3\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Script\player\Bullet.cs" />
     <Compile Include="Assets\Script\player\TowerAttack.cs" />
     <Compile Include="Assets\Script\Core\GameManager.cs" />
+    <Compile Include="Assets\Script\map\WaypointGenerator.cs" />
     <Compile Include="Assets\Script\map\EnemySpawner.cs" />
     <Compile Include="Assets\Script\enenmy\EnemyMove.cs" />
     <Compile Include="Assets\Script\enenmy\EnemyHealth.cs" />
     <Compile Include="Assets\Script\map\WayPoint.cs" />
-    <Compile Include="Assets\Scenes\Bullet.cs" />
-    <Compile Include="Assets\Script\UI\GameManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
