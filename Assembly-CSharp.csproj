@@ -68,11 +68,15 @@
     <Compile Include="Assets\Script\player\TowerAttack.cs" />
     <Compile Include="Assets\Script\Core\GameManager.cs" />
     <Compile Include="Assets\Script\Enemy\EnemyHealth.cs" />
+    <Compile Include="Assets\Script\MainMenu\SFXManager.cs" />
     <Compile Include="Assets\Script\map\WaypointGenerator.cs" />
     <Compile Include="Assets\Script\map\EnemySpawner.cs" />
+    <Compile Include="Assets\Script\MainMenu\BGMManager.cs" />
     <Compile Include="Assets\Script\MainMenu\PlayButton.cs" />
     <Compile Include="Assets\Script\map\WayPoint.cs" />
     <Compile Include="Assets\Script\MainMenu\OptionUIManager.cs" />
+    <Compile Include="Assets\Script\MainMenu\QuitManager.cs" />
+    <Compile Include="Assets\Script\MainMenu\AudioUI.cs" />
     <Compile Include="Assets\Script\Enemy\EnemyMove.cs" />
   </ItemGroup>
   <ItemGroup>
