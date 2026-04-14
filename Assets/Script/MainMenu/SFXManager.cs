@@ -6,18 +6,33 @@ public class SFXManager : MonoBehaviour
 {
     public static SFXManager instance;
 
-    public AudioSource audioSource;
+    public AudioSource sfxSource;
     public AudioClip clickSound;
 
     void Awake()
     {
-        instance = this;
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
-    // 🔊 버튼 클릭 소리
     public void PlayClick()
     {
-        audioSource.PlayOneShot(clickSound);
+        sfxSource.PlayOneShot(clickSound);
     }
-    
+    public void SetVolume(float value)
+    {
+        sfxSource.volume = value;
+    }
+
+    public void SetMute(bool isMute)
+    {
+        sfxSource.mute = isMute;
+    }
 }
