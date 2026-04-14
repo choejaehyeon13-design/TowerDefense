@@ -6,9 +6,9 @@ public class WarriorTower : MonoBehaviour
     public float cooldown = 1f;
 
     public float tileSize = 1f;
-    public float radius = 0.3f;
+    public float radius = 0.6f;
 
-    public GameObject hitEffectPrefab; // 전사 공격 이펙트
+    public GameObject hitEffectPrefab;
 
     float timer = 0f;
 
@@ -70,13 +70,13 @@ public class WarriorTower : MonoBehaviour
 
         foreach (var h in hits)
         {
-            if (h.CompareTag("Enemy"))
+            if (!h.CompareTag("Enemy"))
+                continue;
+
+            EnemyHealth enemyHealth = h.GetComponent<EnemyHealth>();
+            if (enemyHealth != null)
             {
-                EnemyHealth enemyHealth = h.GetComponent<EnemyHealth>();
-                if (enemyHealth != null)
-                {
-                    enemyHealth.TakeDamage(damage);
-                }
+                enemyHealth.TakeDamage(damage);
             }
         }
     }
@@ -87,5 +87,17 @@ public class WarriorTower : MonoBehaviour
         {
             Instantiate(hitEffectPrefab, pos, Quaternion.identity);
         }
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Vector2 c = transform.position;
+        Gizmos.color = Color.red;
+
+        Gizmos.DrawWireSphere(c, radius);
+        Gizmos.DrawWireSphere(c + Vector2.up * tileSize, radius);
+        Gizmos.DrawWireSphere(c + Vector2.down * tileSize, radius);
+        Gizmos.DrawWireSphere(c + Vector2.left * tileSize, radius);
+        Gizmos.DrawWireSphere(c + Vector2.right * tileSize, radius);
     }
 }

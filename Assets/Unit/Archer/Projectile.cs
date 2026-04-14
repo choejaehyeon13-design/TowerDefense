@@ -25,22 +25,17 @@ public class Projectile : MonoBehaviour
         transform.position += (Vector3)(dir * speed * Time.deltaTime);
     }
 
- protected virtual void OnTriggerEnter2D(Collider2D col)
-{
-    if (!col.CompareTag("Enemy")) return;
-
-    Debug.Log("화살이 적과 충돌함");
-
-    EnemyHealth enemyHealth = col.GetComponent<EnemyHealth>();
-    if (enemyHealth != null)
+    protected virtual void OnTriggerEnter2D(Collider2D col)
     {
-        enemyHealth.TakeDamage(damage);
-    }
-    else
-    {
-        Debug.Log("EnemyHealth를 찾지 못함");
-    }
+        if (!col.CompareTag("Enemy"))
+            return;
 
-    Destroy(gameObject);
+        EnemyHealth enemyHealth = col.GetComponent<EnemyHealth>();
+        if (enemyHealth != null)
+        {
+            enemyHealth.TakeDamage(damage);
+        }
+
+        Destroy(gameObject);
     }
 }
