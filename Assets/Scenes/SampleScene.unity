@@ -315,7 +315,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 580166137140983040, guid: 7c31ff5f934e2b34ea1331be334fcf8c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 920471038}
+    - targetCorrespondingSourceObject: {fileID: 580166137140983040, guid: 7c31ff5f934e2b34ea1331be334fcf8c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 920471037}
   m_SourcePrefab: {fileID: 100100000, guid: 7c31ff5f934e2b34ea1331be334fcf8c, type: 3}
 --- !u!4 &106406720 stripped
 Transform:
@@ -1144,7 +1150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1b1e4f2f409a144e8265c3459a68a8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 580166137140983040, guid: 7c31ff5f934e2b34ea1331be334fcf8c, type: 3}
+  enemyPrefab: {fileID: 920471032}
   spawnPoint: {fileID: 412889393}
   WayPoint: {fileID: 567380474}
   enemyCount: 10
@@ -2033,6 +2039,38 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a391ca461b991244b92a3fdfde975774, type: 3}
+--- !u!1 &920471032 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 580166137140983040, guid: 7c31ff5f934e2b34ea1331be334fcf8c, type: 3}
+  m_PrefabInstance: {fileID: 83565410}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &920471037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 920471032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cc964e48326cbe478d4bf8632395395, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 2
+--- !u!114 &920471038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 920471032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45148fde8ff3bad4b9329699b1469937, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 3
+  scoreValue: 10
 --- !u!1 &1031872803
 GameObject:
   m_ObjectHideFlags: 0

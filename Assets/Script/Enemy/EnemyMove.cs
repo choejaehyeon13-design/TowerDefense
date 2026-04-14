@@ -18,7 +18,7 @@ public class EnemyMove : MonoBehaviour
         }
     }
 
-    private void Update()
+    void Update()
     {
         if (wayPoints == null || wayPoints.Length == 0)
             return;
