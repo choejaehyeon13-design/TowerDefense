@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
         UpdateUI();
     }
 
-    public void LoseLife(int amount)
+    public void TakeLife(int amount)
     {
         if (isGameOver) return;
 
@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
 
         if (life <= 0)
         {
-            GameOver();   //  여기서 호출
+            GameOver();
         }
     }
 
@@ -65,13 +65,9 @@ public class GameManager : MonoBehaviour
             lifeText.text = "Life : " + life;
     }
 
-    void GameOver()   
+    void GameOver()
     {
         isGameOver = true;
-
-        Debug.Log("GAME OVER 실행됨");  // 확인용
-
-        Time.timeScale = 0f;
 
         if (gameOverPanel != null)
             gameOverPanel.SetActive(true);
@@ -79,6 +75,7 @@ public class GameManager : MonoBehaviour
         if (gameOverText != null)
             gameOverText.text = "GAME OVER";
     }
+
     public bool IsGameOver()
     {
         return isGameOver;

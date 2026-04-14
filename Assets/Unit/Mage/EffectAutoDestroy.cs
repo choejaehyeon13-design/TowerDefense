@@ -1,0 +1,11 @@
+using UnityEngine;
+
+public class EffectAutoDestroy : MonoBehaviour
+{
+    public float lifeTime = 0.2f;
+
+    void Start()
+    {
+        Destroy(gameObject, lifeTime);
+    }
+}
