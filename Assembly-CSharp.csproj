@@ -59,24 +59,35 @@
     <UnityVersion>2022.3.62f3</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Analyzer Include="C:\Users\최기완\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.2.1\Analyzers\Microsoft.Unity.Analyzers.dll" />
+    <Analyzer Include="C:\Users\minbh\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.2.1\Analyzers\Microsoft.Unity.Analyzers.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.62f3\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.62f3\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Unit\Mage\MageProjectile.cs" />
+    <Compile Include="Assets\Unit\Mage\MageTower.cs" />
     <Compile Include="Assets\Script\player\Bullet.cs" />
     <Compile Include="Assets\Script\player\TowerAttack.cs" />
     <Compile Include="Assets\Script\Core\GameManager.cs" />
     <Compile Include="Assets\Script\Enemy\EnemyHealth.cs" />
+    <Compile Include="Assets\Script\Item\InventoryManager.cs" />
     <Compile Include="Assets\Script\MainMenu\SFXManager.cs" />
     <Compile Include="Assets\Script\map\WaypointGenerator.cs" />
+    <Compile Include="Assets\Script\Item\ItemSlot.cs" />
     <Compile Include="Assets\Script\map\EnemySpawner.cs" />
+    <Compile Include="Assets\Unit\Warrior\WarriorTower.cs" />
+    <Compile Include="Assets\Script\Item\ItemManager.cs" />
     <Compile Include="Assets\Script\SelectStages\StageSelectManager.cs" />
     <Compile Include="Assets\Script\MainMenu\BGMManager.cs" />
+    <Compile Include="Assets\Unit\Archer\ArcherTower.cs" />
     <Compile Include="Assets\Script\MainMenu\OptionPanelUI.cs" />
     <Compile Include="Assets\Script\map\WayPoint.cs" />
+    <Compile Include="Assets\Unit\Archer\Projectile.cs" />
+    <Compile Include="Assets\Script\ClickCircle.cs" />
+    <Compile Include="Assets\Unit\Mage\EffectAutoDestroy.cs" />
     <Compile Include="Assets\Script\map\EnemyPathPainter.cs" />
     <Compile Include="Assets\Script\MainMenu\MainMenuManager.cs" />
+    <Compile Include="Assets\Script\Item\ItemType.cs" />
     <Compile Include="Assets\Script\Enemy\EnemyMove.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -441,26 +452,6 @@
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.62f3\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.iOS.Extensions.Common">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.62f3\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Common.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Android.Types">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.62f3\Editor\Data\PlaybackEngines\AndroidPlayer\Unity.Android.Types.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Android.Gradle">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.62f3\Editor\Data\PlaybackEngines\AndroidPlayer\Unity.Android.Gradle.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Android.GradleProject">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.62f3\Editor\Data\PlaybackEngines\AndroidPlayer\Unity.Android.GradleProject.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="netstandard">

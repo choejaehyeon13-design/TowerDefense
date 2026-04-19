@@ -1,8 +1,8 @@
 public enum ItemType
 {
-    Dragon, 
+    None,  
+    Dragon,
     PlayerHeal,
     TeamBuff,
     TimeSlow
-
 }

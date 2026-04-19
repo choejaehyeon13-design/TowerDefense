@@ -1,10 +1,11 @@
 using System.Collections;
+using UnityEditor.UI;
 using UnityEngine;
 
-public class ItemAutoGiver : MonoBehaviour
+public class ItemManager : MonoBehaviour
 {
-    public float giveInterval = 5f; // 지급 주기 (초)
-    public float StartDelay = 10f;
+    public float giveInterval = 1f;
+    public float startDelay = 1f;
 
     void Start()
     {
@@ -13,11 +14,11 @@ public class ItemAutoGiver : MonoBehaviour
 
     IEnumerator GiveItemLoop()
     {
-        yield return new WaitForSeconds(StartDelay); // 시작 지연
+        yield return new WaitForSeconds(startDelay);
+
         while (true)
         {
             yield return new WaitForSeconds(giveInterval);
-
             GiveRandomItem();
         }
     }
@@ -25,11 +26,15 @@ public class ItemAutoGiver : MonoBehaviour
     void GiveRandomItem()
     {
         if (InventoryManager.Instance == null) return;
+        if (InventoryManager.Instance.currentItem == ItemType.None) {
+            int rand = Random.Range(1, 5);
+            ItemType item = (ItemType)rand;
 
-        int rand = Random.Range(0, 4); // 0~3
-
-        ItemType item = (ItemType)rand;
-
-        InventoryManager.Instance.AddItem(item);
+            InventoryManager.Instance.AddItem(item);
+        }
+        else
+        {
+            Debug.Log("아이템이 이미 있습니다");
+        }
     }
 }
