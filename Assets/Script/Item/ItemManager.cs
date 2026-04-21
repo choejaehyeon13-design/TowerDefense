@@ -7,12 +7,12 @@ public class ItemManager : MonoBehaviour
     public float giveInterval = 1f;
     public float startDelay = 1f;
 
-    void Start()
+    void Start() 
     {
         StartCoroutine(GiveItemLoop());
     }
 
-    IEnumerator GiveItemLoop()
+    IEnumerator GiveItemLoop() //아이템 지급 딜레이
     {
         yield return new WaitForSeconds(startDelay);
 
@@ -23,7 +23,7 @@ public class ItemManager : MonoBehaviour
         }
     }
 
-    void GiveRandomItem()
+    void GiveRandomItem() //아이템 랜덤 지급
     {
         if (InventoryManager.Instance == null) return;
         if (InventoryManager.Instance.currentItem == ItemType.None) {

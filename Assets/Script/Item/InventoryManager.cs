@@ -16,9 +16,17 @@ public class InventoryManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
+        
+    }
+    void Start()
+    {
+        if (GameManager.Instance == null){
+            Debug.Log("게임 매니저 연결되지 않음");
+            return;
+        }
     }
 
-    void Update()
+    void Update() //스페이스로 아이템 사용
     {
         if (currentItem != ItemType.None && Input.GetKeyDown(KeyCode.Space))
         {
@@ -27,7 +35,7 @@ public class InventoryManager : MonoBehaviour
         
     }
 
-    public void AddItem(ItemType item)
+    public void AddItem(ItemType item) //아이템 획득시 currentItem 갱신
     {
         currentItem = item;
         Debug.Log("아이템 획득: " + item);
@@ -35,17 +43,9 @@ public class InventoryManager : MonoBehaviour
         slot.SetItem(item);
     }
 
-    void UseItem()
+    void UseItem() //아이템 사용
     {
         EnemyHealth enemyHealth = GetComponent<EnemyHealth>();
-        if (GameManager.Instance == null){
-            Debug.Log("게임 매니저 연결되지 않음");
-            return;
-        }
-        if (GameManager.Instance.IsGameOver()) {
-            Debug.Log("게임 오버 상태");
-            return;
-        }
         switch (currentItem)
         {
             case ItemType.Dragon:
@@ -59,6 +59,7 @@ public class InventoryManager : MonoBehaviour
 
             case ItemType.TeamBuff:
                 Debug.Log("버프 사용");
+                StartCoroutine(TeamBuff());
                 break;
             case ItemType.TimeSlow:
                 Debug.Log("시간 아이템 사용");
@@ -69,7 +70,7 @@ public class InventoryManager : MonoBehaviour
         currentItem = ItemType.None;
         slot.SetItem(ItemType.None);
     }
-    void UseDragon()
+    void UseDragon() //드래곤 사용
     {
         
         Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -89,15 +90,54 @@ public class InventoryManager : MonoBehaviour
             }
         }
     }
-    IEnumerator TimeSlow()
-    {
-        EnemyMove[] enemies = FindObjectsOfType<EnemyMove>();
+    IEnumerator TimeSlow() //슬로우 사용
+{
+    EnemyMove[] enemies = FindObjectsOfType<EnemyMove>();
 
-        foreach (var move in enemies)
-        {
-            move.speed -= 1f;
-            yield return new WaitForSeconds(TimeSlowLast);
-            move.speed += 1f;
-        }
+    foreach (var move in enemies)
+    {
+        move.speed = Mathf.Max(0, move.speed -1);
     }
+
+    yield return new WaitForSeconds(TimeSlowLast);
+
+    foreach (var move in enemies)
+    {
+        move.speed += 1f;
+    }
+}
+IEnumerator TeamBuff() //팀버프 사용
+{
+    ArcherTower[] archer = FindObjectsOfType<ArcherTower>();
+    MageTower[] mage = FindObjectsOfType<MageTower>();
+    WarriorTower[] warrior = FindObjectsOfType<WarriorTower>();
+
+    foreach (var aRange in archer)
+    {
+        aRange.range += 2f;
+    }
+    foreach (var mRange in archer)
+    {
+         mRange.range = 2f;
+    }
+    foreach (var wRadius in warrior)
+    {
+        wRadius.radius = 2f;
+    }
+
+    yield return new WaitForSeconds(TimeSlowLast);
+
+    foreach (var aRange in archer)
+    {
+        aRange.range -= 2f;
+    }
+    foreach (var mRange in archer)
+    {
+         mRange.range -= 2f;
+    }
+    foreach (var wRadius in warrior)
+    {
+        wRadius.radius -= 2f;
+    }
+}
 }
