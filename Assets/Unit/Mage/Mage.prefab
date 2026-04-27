@@ -75,15 +75,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 1756244459, guid: 2bab0fefed4e24a478a2867e1b6a9c2c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.16, y: 0.26}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &5199284253670102256
@@ -98,11 +98,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 414a834632b3fef458005eec92b2981b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: 315435064908564818, guid: ef06d3c633d2c6a4ca905c7a64210f1e, type: 3}
   range: 7
   cooldown: 3.33
   damage: 3
-  magicPrefab: {fileID: 315435064908564818, guid: ef06d3c633d2c6a4ca905c7a64210f1e, type: 3}
-  firePoint: {fileID: 5266863451009260513}
 --- !u!1 &4974157102194842364
 GameObject:
   m_ObjectHideFlags: 0
