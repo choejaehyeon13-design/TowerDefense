@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class EnemyMove : MonoBehaviour
 {
+    [Header("적 이동 속도")]
     public float speed = 2f;
 
     private Transform[] wayPoints;
@@ -12,15 +13,15 @@ public class EnemyMove : MonoBehaviour
         wayPoints = points;
         currentIndex = 0;
 
-        if (wayPoints != null && wayPoints.Length > 0)
-        {
-            transform.position = wayPoints[0].position;
-        }
+        Debug.Log("웨이포인트 받음: " + wayPoints.Length);
     }
 
-    void Update()
+    private void Update()
     {
         if (wayPoints == null || wayPoints.Length == 0)
+            return;
+
+        if (currentIndex >= wayPoints.Length)
             return;
 
         Transform target = wayPoints[currentIndex];

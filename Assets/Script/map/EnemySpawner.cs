@@ -3,79 +3,92 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [Header("적 프리팹")]
+    [Header("생성할 적 프리팹")]
     public GameObject enemyPrefab;
 
-    [Header("적 스폰 위치")]
-    public Transform spawnPoint;
+    [Header("웨이포인트 생성기")]
+    public WaypointGenerator waypointGenerator;
 
-    [Header("웨이포인트 부모")]
-    public Transform WayPoint;
+    [Header("스폰 포인트 2개")]
+    public Transform[] spawnPoints;
 
-    [Header("적 스폰 설정")]
+    [Header("스폰 설정")]
     public int enemyCount = 10;
     public float spawnInterval = 1.5f;
 
-    private Transform[] wayPoints;
+    private Transform[] leftWayPoints;
+    private Transform[] rightWayPoints;
 
-    private void Start()
+    private IEnumerator Start()
     {
-        LoadWayPoints();
+        while (
+            waypointGenerator == null ||
+            waypointGenerator.leftWayPoints == null ||
+            waypointGenerator.leftWayPoints.Length == 0 ||
+            waypointGenerator.rightWayPoints == null ||
+            waypointGenerator.rightWayPoints.Length == 0
+        )
+        {
+            yield return null;
+        }
+
+        leftWayPoints = waypointGenerator.leftWayPoints;
+        rightWayPoints = waypointGenerator.rightWayPoints;
+
+        Debug.Log("경로 연결 완료: " + leftWayPoints.Length + ", " + rightWayPoints.Length);
+
         StartCoroutine(SpawnEnemies());
     }
 
-    void LoadWayPoints()
+    private IEnumerator SpawnEnemies()
     {
-        if (WayPoint == null)
+        for (int i = 0; i < enemyCount; i++)
         {
-            Debug.LogError("WayPoint가 연결되지 않았습니다.");
-            return;
-        }
-
-        int count = WayPoint.childCount;
-        wayPoints = new Transform[count];
-
-        for (int i = 0; i < count; i++)
-        {
-            wayPoints[i] = WayPoint.GetChild(i);
+            SpawnEnemy();
+            yield return new WaitForSeconds(spawnInterval);
         }
     }
 
-    IEnumerator SpawnEnemies()
+    private void SpawnEnemy()
     {
         if (enemyPrefab == null)
         {
-            Debug.LogError("enemyPrefab이 연결되지 않았습니다.");
-            yield break;
+            Debug.LogError("Enemy Prefab이 연결되지 않았습니다.");
+            return;
         }
 
-        if (spawnPoint == null)
+        if (spawnPoints == null || spawnPoints.Length < 2)
         {
-            Debug.LogError("spawnPoint가 연결되지 않았습니다.");
-            yield break;
+            Debug.LogError("Spawn Points 2개를 연결해야 합니다.");
+            return;
         }
 
-        if (wayPoints == null || wayPoints.Length == 0)
+        int randomIndex = Random.Range(0, 2);
+        Transform selectedSpawnPoint = spawnPoints[randomIndex];
+
+        GameObject enemy = Instantiate(
+            enemyPrefab,
+            selectedSpawnPoint.position,
+            Quaternion.identity
+        );
+
+        Debug.Log("적 생성됨: " + selectedSpawnPoint.name);
+
+        EnemyMove enemyMove = enemy.GetComponent<EnemyMove>();
+
+        if (enemyMove == null)
         {
-            Debug.LogError("WayPoint가 없습니다.");
-            yield break;
+            Debug.LogError("Enemy Prefab에 EnemyMove가 없습니다.");
+            return;
         }
 
-        for (int i = 0; i < enemyCount; i++)
+        if (randomIndex == 0)
         {
-            GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, Quaternion.identity);
-
-            EnemyMove move = enemy.GetComponent<EnemyMove>();
-            if (move != null)
-            {
-                move.SetWayPoints(wayPoints);
-            }
-            else
-            {
-                Debug.LogError("적 프리팹에 EnemyMove 스크립트가 없습니다.");
-            }
-
-            yield return new WaitForSeconds(spawnInterval);
+            enemyMove.SetWayPoints(leftWayPoints);
+        }
+        else
+        {
+            enemyMove.SetWayPoints(rightWayPoints);
         }
     }
 }

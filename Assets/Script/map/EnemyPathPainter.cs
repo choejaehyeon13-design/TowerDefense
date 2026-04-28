@@ -65,9 +65,7 @@ public class EnemyPathPainter : MonoBehaviour
         // 가로 / 세로 직선만 허용
         if (dx != 0 && dy != 0)
         {
-            Debug.LogWarning(
-                $"대각선 경로는 지원하지 않습니다. 시작: {startCell}, 끝: {endCell}"
-            );
+            Debug.LogWarning($"대각선 경로는 지원하지 않습니다. 시작: {startCell}, 끝: {endCell}");
             return;
         }
 

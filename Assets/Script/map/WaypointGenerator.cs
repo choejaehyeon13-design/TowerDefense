@@ -2,67 +2,99 @@ using UnityEngine;
 
 public class WaypointGenerator : MonoBehaviour
 {
+    [Header("웨이포인트 프리팹")]
     public GameObject waypointPrefab;
 
-    void Start()
+    [Header("자동 생성된 왼쪽 경로")]
+    public Transform[] leftWayPoints;
+
+    [Header("자동 생성된 오른쪽 경로")]
+    public Transform[] rightWayPoints;
+
+    [Header("자동 생성된 하단 경로")]
+    public Transform[] bottomWayPoints;
+
+    private void Awake()
     {
-        ClearChildren();
         GenerateWaypoints();
-        ApplyWaypointsToPathPainter();
     }
 
-    void ClearChildren()
+    public void GenerateWaypoints()
     {
-        foreach (Transform child in transform)
+        if (waypointPrefab == null)
         {
-            Destroy(child.gameObject);
+            Debug.LogError("Waypoint Prefab이 연결되지 않았습니다.");
+            return;
         }
-    }
 
-    void GenerateWaypoints()
-    {
-        Vector3[] points = new Vector3[]
+        ClearOldWaypoints();
+
+        Vector3[] leftPath =
         {
-            new Vector3(-7f, -3.5f, 0),
-            new Vector3(-4f, -3.5f, 0),
-
-            new Vector3(-4f,  2.5f, 0),
-            new Vector3(-1f,  2.5f, 0),
-
-            new Vector3(-1f, -2.5f, 0),
-            new Vector3( 2f, -2.5f, 0),
-
-            new Vector3( 2f,  2.5f, 0),
-            new Vector3( 5f,  2.5f, 0),
-
-            new Vector3( 5f, -3.5f, 0),
-            new Vector3( 7f, -3.5f, 0),
+            new Vector3(-8, 0, 0),
+            new Vector3(-6, 0, 0),
+            new Vector3(-6, 3, 0),
+            new Vector3(-3, 3, 0),
+            new Vector3(-3, 0, 0),
+            new Vector3(0, 0, 0),
         };
 
-        for (int i = 0; i < points.Length; i++)
+        Vector3[] rightPath =
         {
-            GameObject wayPoint = Instantiate(waypointPrefab, points[i], Quaternion.identity);
-            wayPoint.name = "Waypoint_" + i;
-            wayPoint.transform.SetParent(transform);
-        }
+            new Vector3(8, 0, 0),
+            new Vector3(6, 0, 0),
+            new Vector3(6, -3, 0),
+            new Vector3(3, -3, 0),
+            new Vector3(3, 0, 0),
+            new Vector3(0, 0, 0),
+        };
+
+        Vector3[] bottomPath =
+        {
+            new Vector3(0, -5, 0),
+            new Vector3(0, -3, 0),
+            new Vector3(-2, -3, 0),
+            new Vector3(-2, 2, 0),
+            new Vector3(2, 2, 0),
+            new Vector3(2, 0, 0),
+            new Vector3(0, 0, 0),
+        };
+
+        leftWayPoints = CreateWaypoints(leftPath, "LeftWayPoint");
+        rightWayPoints = CreateWaypoints(rightPath, "RightWayPoint");
+        bottomWayPoints = CreateWaypoints(bottomPath, "BottomWayPoint");
+
+        Debug.Log("웨이포인트 생성 완료: "
+            + leftWayPoints.Length + ", "
+            + rightWayPoints.Length + ", "
+            + bottomWayPoints.Length);
     }
 
-    void ApplyWaypointsToPathPainter()
+    private Transform[] CreateWaypoints(Vector3[] path, string prefix)
     {
-        EnemyPathPainter pathPainter = GetComponent<EnemyPathPainter>();
+        Transform[] result = new Transform[path.Length];
 
-        if (pathPainter != null)
+        for (int i = 0; i < path.Length; i++)
         {
-            Transform[] children = GetComponentsInChildren<Transform>();
+            GameObject point = Instantiate(
+                waypointPrefab,
+                path[i],
+                Quaternion.identity,
+                transform
+            );
 
-            pathPainter.wayPoints = new Transform[children.Length - 1];
+            point.name = prefix + "_" + i;
+            result[i] = point.transform;
+        }
 
-            for (int i = 1; i < children.Length; i++)
-            {
-                pathPainter.wayPoints[i - 1] = children[i];
-            }
+        return result;
+    }
 
-            pathPainter.DrawPath();
+    private void ClearOldWaypoints()
+    {
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            Destroy(transform.GetChild(i).gameObject);
         }
     }
 }
