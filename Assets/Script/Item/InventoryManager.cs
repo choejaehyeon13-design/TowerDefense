@@ -12,6 +12,7 @@ public class InventoryManager : MonoBehaviour
     public float dragonRadius = 3f;
     public int dragonDamage = 3;
     public float TimeSlowLast = 3f;
+    public float TeamBuffLast = 2f;
 
     void Awake()
     {
@@ -125,7 +126,7 @@ IEnumerator TeamBuff() //팀버프 사용
         wRadius.radius = 2f;
     }
 
-    yield return new WaitForSeconds(TimeSlowLast);
+    yield return new WaitForSeconds(TeamBuffLast);
 
     foreach (var aRange in archer)
     {
