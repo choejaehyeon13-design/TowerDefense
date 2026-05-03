@@ -3,7 +3,7 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour
 {
     public int maxHealth = 3;
-    public int scoreValue = 10;
+    public int goldValue = 5;
 
     private int currentHealth;
 
@@ -18,12 +18,15 @@ public class EnemyHealth : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            if (GameManager.Instance != null)
-            {
-                GameManager.Instance.AddScore(scoreValue);
-            }
-
-            Destroy(gameObject);
+            Die();
         }
+    }
+
+    void Die()
+    {
+        // 골드 지급
+        Gold.Instance.AddGold(goldValue);
+
+        Destroy(gameObject);
     }
 }
