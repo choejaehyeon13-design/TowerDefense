@@ -6,7 +6,17 @@ public class WaypointGenerator : MonoBehaviour
 
     void Start()
     {
+        ClearChildren();
         GenerateWaypoints();
+        ApplyWaypointsToPathPainter();
+    }
+
+    void ClearChildren()
+    {
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
     }
 
     void GenerateWaypoints()
@@ -31,11 +41,28 @@ public class WaypointGenerator : MonoBehaviour
 
         for (int i = 0; i < points.Length; i++)
         {
-            GameObject wp = Instantiate(waypointPrefab, points[i], Quaternion.identity);
+            GameObject wayPoint = Instantiate(waypointPrefab, points[i], Quaternion.identity);
+            wayPoint.name = "Waypoint_" + i;
+            wayPoint.transform.SetParent(transform);
+        }
+    }
 
-            wp.name = "Waypoint_" + i;
+    void ApplyWaypointsToPathPainter()
+    {
+        EnemyPathPainter pathPainter = GetComponent<EnemyPathPainter>();
 
-            wp.transform.parent = this.transform;
+        if (pathPainter != null)
+        {
+            Transform[] children = GetComponentsInChildren<Transform>();
+
+            pathPainter.wayPoints = new Transform[children.Length - 1];
+
+            for (int i = 1; i < children.Length; i++)
+            {
+                pathPainter.wayPoints[i - 1] = children[i];
+            }
+
+            pathPainter.DrawPath();
         }
     }
 }

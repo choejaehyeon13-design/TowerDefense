@@ -10,7 +10,7 @@ public class EnemySpawner : MonoBehaviour
     public Transform spawnPoint;
 
     [Header("웨이포인트 부모")]
-    public Transform WayPoint;
+    public Transform wayPoint;
 
     [Header("적 스폰 설정")]
     public int enemyCount = 10;
@@ -26,18 +26,18 @@ public class EnemySpawner : MonoBehaviour
 
     void LoadWayPoints()
     {
-        if (WayPoint == null)
+        if (wayPoint == null)
         {
-            Debug.LogError("WayPoint가 연결되지 않았습니다.");
+            Debug.LogError("wayPoint가 연결되지 않았습니다.");
             return;
         }
 
-        int count = WayPoint.childCount;
+        int count = wayPoint.childCount;
         wayPoints = new Transform[count];
 
         for (int i = 0; i < count; i++)
         {
-            wayPoints[i] = WayPoint.GetChild(i);
+            wayPoints[i] = wayPoint.GetChild(i);
         }
     }
 

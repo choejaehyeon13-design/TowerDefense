@@ -1,40 +1,32 @@
 using UnityEngine;
 
-// Àû Ã¼·ÂÀ» °ü¸®ÇÏ´Â ½ºÅ©¸³Æ®
 public class EnemyHealth : MonoBehaviour
 {
-    // Àû ÃÖ´ë Ã¼·Â
     public int maxHealth = 3;
+    public int goldValue = 5;
 
-    // ÀûÀ» Àâ¾ÒÀ» ¶§ ¾ò´Â Á¡¼ö
-    public int scoreValue = 10;
-
-    // ÇöÀç Ã¼·Â
     private int currentHealth;
 
     void Start()
     {
-        // ½ÃÀÛÇÒ ¶§ ÇöÀç Ã¼·ÂÀ» ÃÖ´ë Ã¼·ÂÀ¸·Î ¼³Á¤
         currentHealth = maxHealth;
     }
 
-    // µ¥¹ÌÁö¸¦ ¹Ş´Â ÇÔ¼ö
     public void TakeDamage(int damage)
     {
-        // µ¥¹ÌÁö¸¸Å­ Ã¼·Â °¨¼Ò
         currentHealth -= damage;
 
-        // Ã¼·ÂÀÌ 0 ÀÌÇÏ°¡ µÇ¸é Àû »ç¸Á
         if (currentHealth <= 0)
         {
-            // Á¡¼ö Áõ°¡
-            if (GameManager.Instance != null)
-            {
-                GameManager.Instance.AddScore(scoreValue);
-            }
-
-            // Àû »èÁ¦
-            Destroy(gameObject);
+            Die();
         }
+    }
+
+    void Die()
+    {
+        // ê³¨ë“œ ì§€ê¸‰
+        Gold.Instance.AddGold(goldValue);
+
+        Destroy(gameObject);
     }
 }

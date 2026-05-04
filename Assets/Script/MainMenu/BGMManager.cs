@@ -1,54 +1,52 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class BGMManager : MonoBehaviour
 {
     public static BGMManager instance;
 
-    private AudioSource audioSource;
-    private float prevVolume = 1f; // 음소거 해제용
+    public AudioSource audioSource;
+    public AudioClip bgmClip;
 
-    
     void Awake()
     {
+
+        // ▶ 싱글톤 (중복 방지)
         if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
 
             audioSource = GetComponent<AudioSource>();
+            
+            
         }
         else
         {
             Destroy(gameObject);
-        }
-    }
-
-    // 🎚️ 볼륨 조절
-    public void SetVolume(float volume)
+        }   }
+        void Start()
     {
-        audioSource.volume = volume;
-    }
-
-    // 🔇 음소거 ON/OFF
-    public void ToggleMute(bool isMute)
-    {
-        if (isMute)
+        if (!audioSource.isPlaying)
         {
-            prevVolume = audioSource.volume;
-            audioSource.volume = 0f;
+            audioSource.clip = bgmClip;
+            audioSource.loop = true;
+            audioSource.Play();
         }
-        else
-        {
-            audioSource.volume = prevVolume;
-        }
+
+        Debug.Log("BGM START PLAY: " + audioSource.isPlaying);
+    }
+        // 🎚️ 볼륨
+    public void SetVolume(float value)
+    {
+        audioSource.volume = value;
     }
 
-    // 현재 볼륨 가져오기 (UI 초기화용)
-    public float GetVolume()
+    // 🔇 음소거
+    public void SetMute(bool isMute)
     {
-        return audioSource.volume;
+        audioSource.mute = isMute;
     }
+    
 }
