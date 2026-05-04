@@ -1,25 +1,26 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ItemSlot : MonoBehaviour
 {
-    public Sprite emptySprite;          
-    public Sprite[] itemSprites;        
-
-    public SpriteRenderer iconRenderer; 
+    public Sprite[] itemSprites;
+    public Image iconImage;
 
     public void SetItem(ItemType item)
     {
         if (item == ItemType.None)
         {
-            iconRenderer.sprite = emptySprite;
+            iconImage.sprite = null;
+            iconImage.enabled = false;
             return;
         }
-
+        Debug.Log(iconImage);
         int index = (int)item;
 
         if (index >= 0 && index < itemSprites.Length)
         {
-            iconRenderer.sprite = itemSprites[index];
+            iconImage.sprite = itemSprites[index];
+            iconImage.enabled = true;
         }
     }
 }

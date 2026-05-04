@@ -73,9 +73,11 @@
     <Compile Include="Assets\Script\Item\InventoryManager.cs" />
     <Compile Include="Assets\Script\MainMenu\SFXManager.cs" />
     <Compile Include="Assets\Script\map\WaypointGenerator.cs" />
+    <Compile Include="Assets\Unit\TowerPlacer.cs" />
     <Compile Include="Assets\Script\Item\ItemSlot.cs" />
     <Compile Include="Assets\Script\map\EnemySpawner.cs" />
     <Compile Include="Assets\Unit\Warrior\WarriorTower.cs" />
+    <Compile Include="Assets\Unit\TowerShop.cs" />
     <Compile Include="Assets\Script\Item\ItemManager.cs" />
     <Compile Include="Assets\Script\SelectStages\StageSelectManager.cs" />
     <Compile Include="Assets\Script\MainMenu\BGMManager.cs" />
@@ -88,6 +90,8 @@
     <Compile Include="Assets\Script\MainMenu\MainMenuManager.cs" />
     <Compile Include="Assets\Script\Item\ItemType.cs" />
     <Compile Include="Assets\Script\Enemy\EnemyMove.cs" />
+    <Compile Include="Assets\FindMissingScripts.cs" />
+    <Compile Include="Assets\Unit\Gold.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

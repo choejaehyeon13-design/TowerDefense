@@ -131,7 +131,7 @@ IEnumerator TeamBuff() //팀버프 사용
     {
         aRange.range -= 2f;
     }
-    foreach (var mRange in archer)
+    foreach (var mRange in mage)
     {
          mRange.range -= 2f;
     }
