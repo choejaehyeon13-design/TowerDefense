@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class MageTower : MonoBehaviour
 {
@@ -7,18 +8,27 @@ public class MageTower : MonoBehaviour
     public float cooldown = 0.3f;
     public int damage = 3;
 
-    private float timer = 0f;
-
-    void Update()
+    void Start()
     {
-        timer -= Time.deltaTime;
+        StartCoroutine(AttackRoutine());
+    }
 
-        Transform target = FindNearestEnemy();
-
-        if (target != null && timer <= 0f)
+    IEnumerator AttackRoutine()
+    {
+        while (true)
         {
-            Shoot(target);
-            timer = cooldown;
+            Transform target = FindNearestEnemy();
+
+            if (target != null)
+            {
+                Shoot(target);
+                yield return new WaitForSeconds(cooldown);
+            }
+            else
+            {
+                // 적 없으면 너무 자주 검사 안하게
+                yield return new WaitForSeconds(0.1f);
+            }
         }
     }
 

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class ArcherTower : MonoBehaviour
 {
@@ -7,18 +8,32 @@ public class ArcherTower : MonoBehaviour
     public float cooldown = 1f;
     public int damage = 1;
 
-    private float timer = 0f;
-
-    void Update()
+    void Start()
     {
-        timer -= Time.deltaTime;
+        StartCoroutine(AttackRoutine());
+    }
 
-        Transform target = FindNearestEnemy();
-
-        if (target != null && timer <= 0f)
+    IEnumerator AttackRoutine()
+    {
+        while (true)
         {
-            Shoot(target);
-            timer = cooldown;
+            Transform target = FindNearestEnemy();
+
+            // 👉 적 없으면 대기
+            if (target == null)
+            {
+                Debug.Log("아쳐타워: 공격 대기중");
+                yield return new WaitForSeconds(0.2f);
+            }
+            else
+            {
+                Debug.Log("아쳐타워: 적 발견");
+
+                Shoot(target);
+
+                // 👉 코루틴 쿨타임 처리
+                yield return new WaitForSeconds(cooldown);
+            }
         }
     }
 
@@ -32,6 +47,7 @@ public class ArcherTower : MonoBehaviour
         foreach (GameObject enemy in enemies)
         {
             float dist = Vector2.Distance(transform.position, enemy.transform.position);
+
             if (dist <= minDist)
             {
                 minDist = dist;
