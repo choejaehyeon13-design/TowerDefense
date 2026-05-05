@@ -9623,7 +9623,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30d9b54fcd7d449499f8a2e675604188, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waypointPrefab: {fileID: 0}
+  waypointPrefab: {fileID: 2108630689}
 --- !u!114 &1399925137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9636,8 +9636,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c519c5110f543bf408a6d224afa53a26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetTilemap: {fileID: 0}
-  enemyMoveTile: {fileID: 0}
+  targetTilemap: {fileID: 14497085}
+  enemyMoveTile: {fileID: 11400000, guid: 9e806890848df574ea25610f3f00019a, type: 2}
   wayPoints: []
 --- !u!4 &1399925138
 Transform:
