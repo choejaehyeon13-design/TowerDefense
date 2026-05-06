@@ -12,6 +12,7 @@ public class ItemManager : MonoBehaviour
     public int dragonDamage = 3;
     public float TimeSlowLast = 3f;
     public float TeamBuffLast = 2f;
+    public int giveUpgradeCost = 10;
     void Awake()
     {
         Instance = this;
@@ -139,24 +140,25 @@ public class ItemManager : MonoBehaviour
 
     void GiveRandomItem() //아이템 랜덤 지급
     {
-        if (InventoryManager.Instance == null) return;
-        if (currentItem == ItemType.None) {
-            int rand = Random.Range(1, 5);
-            ItemType item = (ItemType)rand;
-
-            InventoryManager.Instance.setInven(item);
-        }
-        else
+        if (currentItem != ItemType.None)
         {
-            Debug.Log("아이템이 이미 있습니다");
+            Debug.Log("이미 아이템 있음");
+            return;
         }
+
+        int rand = Random.Range(1, 5);
+        ItemType item = (ItemType)rand;
+
+        currentItem = item;
+
+        InventoryManager.Instance.setInven(item);
+        Debug.Log("아이템 지급: " + item);
     }
     public void GiveUpgrade()
     {
-        if (giveInterval >= 0)
-        {
-            giveInterval = Mathf.Max(1f, giveInterval - 1f);
-            Debug.Log("지급 주기 감소");
-        }
+        if (Gold.Instance.UseGold(giveUpgradeCost))
+        giveInterval = Mathf.Max(1f, giveInterval - 1f);
+        Debug.Log("지급 주기 감소");
+        
     }
 }

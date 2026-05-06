@@ -1,5 +1,3 @@
-using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
@@ -26,7 +24,6 @@ public class InventoryManager : MonoBehaviour
         Debug.Log("아이템 획득: " + item);
 
         slot.SetItem(item);
-        ItemManager.Instance.currentItem = item;
     }
 
     
