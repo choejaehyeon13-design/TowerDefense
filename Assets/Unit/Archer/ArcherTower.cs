@@ -19,6 +19,8 @@ public class ArcherTower : MonoBehaviour
         {
             Shoot(target);
             timer = cooldown;
+
+            Debug.Log("short");
         }
     }
 
