@@ -21,8 +21,19 @@ public class Projectile : MonoBehaviour
             return;
         }
 
-        Vector2 dir = (target.position - transform.position).normalized;
-        transform.position += (Vector3)(dir * speed * Time.deltaTime);
+        Vector2 dir =
+            (target.position - transform.position).normalized;
+
+        // 이동 방향 바라보기
+        float angle =
+            Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        transform.rotation =
+            Quaternion.Euler(0, 0, angle - 90f);
+
+        // 이동
+        transform.position +=
+            (Vector3)(dir * speed * Time.deltaTime);
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D col)
@@ -30,7 +41,9 @@ public class Projectile : MonoBehaviour
         if (!col.CompareTag("Enemy"))
             return;
 
-        EnemyHealth enemyHealth = col.GetComponent<EnemyHealth>();
+        EnemyHealth enemyHealth =
+            col.GetComponent<EnemyHealth>();
+
         if (enemyHealth != null)
         {
             enemyHealth.TakeDamage(damage);
