@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[ExecuteAlways]
 public class WaypointGenerator : MonoBehaviour
 {
     [Header("웨이포인트 프리팹")]
@@ -11,80 +12,100 @@ public class WaypointGenerator : MonoBehaviour
     [Header("자동 생성된 오른쪽 경로")]
     public Transform[] rightWayPoints;
 
-    [Header("자동 생성된 하단 경로")]
-    public Transform[] bottomWayPoints;
+    [Header("에디터에서 자동 생성")]
+    public bool autoGenerateInEditor = true;
 
     private void Awake()
     {
-        GenerateWaypoints();
+        if (Application.isPlaying)
+        {
+            if (leftWayPoints == null || leftWayPoints.Length == 0 ||
+                rightWayPoints == null || rightWayPoints.Length == 0)
+            {
+                GenerateWaypoints();
+            }
+        }
     }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if (!autoGenerateInEditor) return;
+        if (Application.isPlaying) return;
+
+        UnityEditor.EditorApplication.delayCall += () =>
+        {
+            if (this == null) return;
+            GenerateWaypoints();
+        };
+    }
+#endif
 
     public void GenerateWaypoints()
     {
-        if (waypointPrefab == null)
-        {
-            Debug.LogError("Waypoint Prefab이 연결되지 않았습니다.");
-            return;
-        }
-
         ClearOldWaypoints();
 
-        Vector3[] leftPath =
+        Vector3[] leftPositions =
         {
-            new Vector3(-8, 0, 0),
-            new Vector3(-6, 0, 0),
-            new Vector3(-6, 3, 0),
-            new Vector3(-3, 3, 0),
-            new Vector3(-3, 0, 0),
-            new Vector3(0, 0, 0),
+            new Vector3(-15, 0, 0),
+            new Vector3(-10, 0, 0),
+            new Vector3(-10, 5, 0),
+            new Vector3(-8, 5, 0),
+            new Vector3(-8, -4, 0),
+            new Vector3(-5, -4, 0),
+            new Vector3(-5, 5, 0),
+            new Vector3(2, 5, 0),
+            new Vector3(2, -4, 0),
+            new Vector3(5, -4, 0),
+            new Vector3(5, 5, 0),
+            new Vector3(9, 5, 0),
+            new Vector3(9, 0, 0),
+            new Vector3(15, 0, 0)
         };
 
-        Vector3[] rightPath =
+        Vector3[] rightPositions =
         {
-            new Vector3(8, 0, 0),
-            new Vector3(6, 0, 0),
-            new Vector3(6, -3, 0),
-            new Vector3(3, -3, 0),
-            new Vector3(3, 0, 0),
-            new Vector3(0, 0, 0),
+            new Vector3(15, 0, 0),
+            new Vector3(9, 0, 0),
+            new Vector3(9, 5, 0),
+            new Vector3(5, 5, 0),
+            new Vector3(5, -4, 0),
+            new Vector3(2, -4, 0),
+            new Vector3(2, 5, 0),
+            new Vector3(-5, 5, 0),
+            new Vector3(-5, -4, 0),
+            new Vector3(-8, -4, 0),
+            new Vector3(-8, 5, 0),
+            new Vector3(-10, 5, 0),
+            new Vector3(-10, 0, 0),
+            new Vector3(-15, 0, 0)
         };
 
-        Vector3[] bottomPath =
-        {
-            new Vector3(0, -5, 0),
-            new Vector3(0, -3, 0),
-            new Vector3(-2, -3, 0),
-            new Vector3(-2, 2, 0),
-            new Vector3(2, 2, 0),
-            new Vector3(2, 0, 0),
-            new Vector3(0, 0, 0),
-        };
-
-        leftWayPoints = CreateWaypoints(leftPath, "LeftWayPoint");
-        rightWayPoints = CreateWaypoints(rightPath, "RightWayPoint");
-        bottomWayPoints = CreateWaypoints(bottomPath, "BottomWayPoint");
-
-        Debug.Log("웨이포인트 생성 완료: "
-            + leftWayPoints.Length + ", "
-            + rightWayPoints.Length + ", "
-            + bottomWayPoints.Length);
+        leftWayPoints = CreateWaypoints(leftPositions, "LeftWayPoint");
+        rightWayPoints = CreateWaypoints(rightPositions, "RightWayPoint");
     }
 
-    private Transform[] CreateWaypoints(Vector3[] path, string prefix)
+    private Transform[] CreateWaypoints(Vector3[] positions, string prefix)
     {
-        Transform[] result = new Transform[path.Length];
+        Transform[] result = new Transform[positions.Length];
 
-        for (int i = 0; i < path.Length; i++)
+        for (int i = 0; i < positions.Length; i++)
         {
-            GameObject point = Instantiate(
-                waypointPrefab,
-                path[i],
-                Quaternion.identity,
-                transform
-            );
+            GameObject obj;
 
-            point.name = prefix + "_" + i;
-            result[i] = point.transform;
+            if (waypointPrefab != null)
+            {
+                obj = Instantiate(waypointPrefab, positions[i], Quaternion.identity, transform);
+            }
+            else
+            {
+                obj = new GameObject();
+                obj.transform.SetParent(transform);
+                obj.transform.position = positions[i];
+            }
+
+            obj.name = $"{prefix}_{i}";
+            result[i] = obj.transform;
         }
 
         return result;
@@ -94,7 +115,12 @@ public class WaypointGenerator : MonoBehaviour
     {
         for (int i = transform.childCount - 1; i >= 0; i--)
         {
-            Destroy(transform.GetChild(i).gameObject);
+            Transform child = transform.GetChild(i);
+
+            if (Application.isPlaying)
+                Destroy(child.gameObject);
+            else
+                DestroyImmediate(child.gameObject);
         }
     }
 }
