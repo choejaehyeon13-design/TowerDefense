@@ -85,6 +85,7 @@
     <Compile Include="Assets\Script\MainMenu\OptionPanelUI.cs" />
     <Compile Include="Assets\Script\map\WayPoint.cs" />
     <Compile Include="Assets\Unit\Archer\Projectile.cs" />
+    <Compile Include="Assets\Script\ClickCircle.cs" />
     <Compile Include="Assets\Unit\Mage\EffectAutoDestroy.cs" />
     <Compile Include="Assets\Script\map\TowerDeploymanage.cs" />
     <Compile Include="Assets\Script\map\EnemyPathPainter.cs" />
