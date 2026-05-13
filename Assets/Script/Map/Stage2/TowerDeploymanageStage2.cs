@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class TowerPlacementManager : MonoBehaviour
+public class TowerPlacementManagerStage2 : MonoBehaviour
 {
     [Header("설치 가능한 타일맵")]
     public Tilemap buildTilemap;

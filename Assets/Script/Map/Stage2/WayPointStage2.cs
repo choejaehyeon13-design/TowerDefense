@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class WayPoint : MonoBehaviour
+public class WayPoint_Stage2 : MonoBehaviour
 {
     private void OnDrawGizmos()
     {

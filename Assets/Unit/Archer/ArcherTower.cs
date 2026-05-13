@@ -31,12 +31,6 @@ public class ArcherTower : MonoBehaviour
     {
         while (true)
         {
-
-            Shoot(target);
-            timer = cooldown;
-
-            Debug.Log("short");
-
             if (!isAttacking && Time.time >= lastAttackTime + cooldown)
             {
                 currentTarget = FindNearestEnemy();
@@ -63,15 +57,10 @@ public class ArcherTower : MonoBehaviour
     {
         isAttacking = true;
 
-        // 활 당기기
         animator.SetInteger("State", 1);
 
         yield return new WaitForSeconds(preAttackDelay);
 
-        // 공격 모션
-        animator.SetInteger("State", 2);
-
-        // 화살 발사
         if (currentTarget != null)
         {
             Shoot(currentTarget);
@@ -79,11 +68,9 @@ public class ArcherTower : MonoBehaviour
 
         yield return new WaitForSeconds(attackDuration);
 
-        // Idle 복귀
-        animator.SetInteger("State", 0);
+        PlayIdle();
 
         isAttacking = false;
-        currentTarget = null;
     }
 
     void PlayIdle()
@@ -96,7 +83,6 @@ public class ArcherTower : MonoBehaviour
         if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
         {
             animator.SetInteger("Direction", 2);
-
             spriteRenderer.flipX = dir.x < 0;
         }
         else
@@ -111,7 +97,6 @@ public class ArcherTower : MonoBehaviour
             }
 
             spriteRenderer.flipX = false;
-
         }
     }
 
@@ -120,13 +105,11 @@ public class ArcherTower : MonoBehaviour
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
         Transform nearest = null;
-
         float minDist = range;
 
         foreach (GameObject enemy in enemies)
         {
-            float dist =
-                Vector2.Distance(transform.position, enemy.transform.position);
+            float dist = Vector2.Distance(transform.position, enemy.transform.position);
 
             if (dist <= minDist)
             {
