@@ -1,16 +1,21 @@
 using System.Collections;
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour
+public class EnemySpawner_Stage2 : MonoBehaviour
 {
     [Header("생성할 적 프리팹")]
     public GameObject enemyPrefab;
 
+
+    
+    [Header("웨이포인트 생성기")]
+    public WaypointGenerator_Stage2 waypointGenerator;
+
+    
     [Header("스폰 포인트 2개")]
     public Transform[] spawnPoints;
 
-    [Header("웨이포인트 생성기")]
-    public WaypointGenerator waypointGenerator;
+
 
     [Header("스폰 설정")]
     public int enemyCount = 10;

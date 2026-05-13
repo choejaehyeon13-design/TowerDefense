@@ -1,15 +1,15 @@
 using UnityEngine;
 
 [ExecuteAlways]
-public class WaypointGenerator : MonoBehaviour
+public class WaypointGenerator_Stage2 : MonoBehaviour
 {
     [Header("웨이포인트 프리팹")]
     public GameObject waypointPrefab;
 
-    [Header("자동 생성된 왼쪽 경로")]
+    [Header("Stage1 경로")]
     public Transform[] leftWayPoints;
 
-    [Header("자동 생성된 오른쪽 경로")]
+    [Header("Stage1에서는 사용하지 않음")]
     public Transform[] rightWayPoints;
 
     [Header("에디터에서 자동 생성")]
@@ -19,8 +19,7 @@ public class WaypointGenerator : MonoBehaviour
     {
         if (Application.isPlaying)
         {
-            if (leftWayPoints == null || leftWayPoints.Length == 0 ||
-                rightWayPoints == null || rightWayPoints.Length == 0)
+            if (leftWayPoints == null || leftWayPoints.Length == 0)
             {
                 GenerateWaypoints();
             }
@@ -45,7 +44,8 @@ public class WaypointGenerator : MonoBehaviour
     {
         ClearOldWaypoints();
 
-        Vector3[] leftPositions =
+        // Stage1: 왼쪽에서 출발해서 오른쪽 끝으로 이동
+        Vector3[] stage1Positions =
         {
             new Vector3(-15, 0, 0),
             new Vector3(-10, 0, 0),
@@ -63,26 +63,10 @@ public class WaypointGenerator : MonoBehaviour
             new Vector3(15, 0, 0)
         };
 
-        Vector3[] rightPositions =
-        {
-            new Vector3(15, 0, 0),
-            new Vector3(9, 0, 0),
-            new Vector3(9, 5, 0),
-            new Vector3(5, 5, 0),
-            new Vector3(5, -4, 0),
-            new Vector3(2, -4, 0),
-            new Vector3(2, 5, 0),
-            new Vector3(-5, 5, 0),
-            new Vector3(-5, -4, 0),
-            new Vector3(-8, -4, 0),
-            new Vector3(-8, 5, 0),
-            new Vector3(-10, 5, 0),
-            new Vector3(-10, 0, 0),
-            new Vector3(-15, 0, 0)
-        };
+        leftWayPoints = CreateWaypoints(stage1Positions, "Stage1WayPoint");
 
-        leftWayPoints = CreateWaypoints(leftPositions, "LeftWayPoint");
-        rightWayPoints = CreateWaypoints(rightPositions, "RightWayPoint");
+        // Stage1에서는 오른쪽 경로 없음
+        rightWayPoints = new Transform[0];
     }
 
     private Transform[] CreateWaypoints(Vector3[] positions, string prefix)

@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 [ExecuteAlways]
-public class EnemyPathPainter : MonoBehaviour
+public class EnemyPathPainter_Stage2 : MonoBehaviour
 {
     [Header("타일을 그릴 Tilemap")]
     public Tilemap targetTilemap;
@@ -11,13 +11,14 @@ public class EnemyPathPainter : MonoBehaviour
     public TileBase enemyMoveTile;
 
     [Header("웨이포인트 생성기")]
-    public WaypointGenerator waypointGenerator;
+    public WaypointGenerator_Stage2 waypointGenerator;
 
     [Header("에디터에서 자동으로 길 그리기")]
     public bool autoPaintInEditor = true;
 
     private void OnEnable()
     {
+        AutoConnectWaypointGenerator();
         PaintPath();
     }
 
@@ -29,28 +30,68 @@ public class EnemyPathPainter : MonoBehaviour
         UnityEditor.EditorApplication.delayCall += () =>
         {
             if (this == null) return;
+
+            AutoConnectWaypointGenerator();
             PaintPath();
         };
     }
 #endif
 
+    private void AutoConnectWaypointGenerator()
+    {
+        if (waypointGenerator != null) return;
+
+        waypointGenerator = GetComponent<WaypointGenerator_Stage2>();
+
+        if (waypointGenerator == null)
+        {
+            waypointGenerator = FindObjectOfType<WaypointGenerator_Stage2>();
+        }
+    }
+
+    [ContextMenu("Paint Enemy Path")]
     public void PaintPath()
     {
-        if (targetTilemap == null || enemyMoveTile == null || waypointGenerator == null)
+        if (targetTilemap == null)
+        {
+            Debug.LogWarning("EnemyPathPainter: targetTilemap이 비어 있습니다.");
             return;
+        }
+
+        if (enemyMoveTile == null)
+        {
+            Debug.LogWarning("EnemyPathPainter: enemyMoveTile이 비어 있습니다.");
+            return;
+        }
+
+        if (waypointGenerator == null)
+        {
+            Debug.LogWarning("EnemyPathPainter: waypointGenerator가 비어 있습니다.");
+            return;
+        }
+
+        if (waypointGenerator.leftWayPoints == null ||
+            waypointGenerator.leftWayPoints.Length < 2)
+        {
+            waypointGenerator.GenerateWaypoints();
+        }
 
         targetTilemap.ClearAllTiles();
 
         DrawPath(waypointGenerator.leftWayPoints);
-        DrawPath(waypointGenerator.rightWayPoints);
 
         targetTilemap.RefreshAllTiles();
+
+        Debug.Log("Stage1 적 이동 경로 타일 생성 완료");
     }
 
     private void DrawPath(Transform[] waypoints)
     {
         if (waypoints == null || waypoints.Length < 2)
+        {
+            Debug.LogWarning("DrawPath: 웨이포인트가 부족합니다.");
             return;
+        }
 
         for (int i = 0; i < waypoints.Length - 1; i++)
         {
