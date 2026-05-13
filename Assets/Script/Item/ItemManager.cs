@@ -156,9 +156,15 @@ public class ItemManager : MonoBehaviour
     }
     public void GiveUpgrade()
     {
-        if (Gold.Instance.UseGold(giveUpgradeCost))
-        giveInterval = Mathf.Max(1f, giveInterval - 1f);
-        Debug.Log("지급 주기 감소");
-        
+        if (giveInterval > 1f)
+        {
+            if (Gold.Instance.UseGold(giveUpgradeCost)){
+                giveInterval = Mathf.Max(1f, giveInterval - 1f);
+                Debug.Log("지급 주기 감소");
+            }
+        }
+        else {
+            Debug.Log("최대 업그레이드");
+        }
     }
 }

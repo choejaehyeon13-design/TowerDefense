@@ -3,10 +3,24 @@ using System.Collections;
 
 public class ArcherTower : MonoBehaviour
 {
+    [Header("Attack")]
     public GameObject projectilePrefab;
     public float range = 7f;
     public float cooldown = 1f;
     public int damage = 1;
+
+    [Header("Animation")]
+    public Animator animator;
+    public SpriteRenderer spriteRenderer;
+
+    [Header("Timing")]
+    public float preAttackDelay = 0.15f;
+    public float attackDuration = 0.3f;
+
+    private Transform currentTarget;
+
+    private bool isAttacking = false;
+    private float lastAttackTime = -999f;
 
     void Start()
     {
@@ -17,23 +31,80 @@ public class ArcherTower : MonoBehaviour
     {
         while (true)
         {
-            Transform target = FindNearestEnemy();
-
-            // 👉 적 없으면 대기
-            if (target == null)
+            if (!isAttacking && Time.time >= lastAttackTime + cooldown)
             {
-                Debug.Log("아쳐타워: 공격 대기중");
-                yield return new WaitForSeconds(0.2f);
+                currentTarget = FindNearestEnemy();
+
+                if (currentTarget != null)
+                {
+                    SetDirection(currentTarget.position - transform.position);
+
+                    StartCoroutine(AttackSequence());
+
+                    lastAttackTime = Time.time;
+                }
+                else
+                {
+                    PlayIdle();
+                }
+            }
+
+            yield return null;
+        }
+    }
+
+    IEnumerator AttackSequence()
+    {
+        isAttacking = true;
+
+        // 활 당기기
+        animator.SetInteger("State", 1);
+
+        yield return new WaitForSeconds(preAttackDelay);
+
+        // 공격 모션
+        animator.SetInteger("State", 2);
+
+        // 화살 발사
+        if (currentTarget != null)
+        {
+            Shoot(currentTarget);
+        }
+
+        yield return new WaitForSeconds(attackDuration);
+
+        // Idle 복귀
+        animator.SetInteger("State", 0);
+
+        isAttacking = false;
+        currentTarget = null;
+    }
+
+    void PlayIdle()
+    {
+        animator.SetInteger("State", 0);
+    }
+
+    void SetDirection(Vector2 dir)
+    {
+        if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+        {
+            animator.SetInteger("Direction", 2);
+
+            spriteRenderer.flipX = dir.x < 0;
+        }
+        else
+        {
+            if (dir.y > 0)
+            {
+                animator.SetInteger("Direction", 1);
             }
             else
             {
-                Debug.Log("아쳐타워: 적 발견");
-
-                Shoot(target);
-
-                // 👉 코루틴 쿨타임 처리
-                yield return new WaitForSeconds(cooldown);
+                animator.SetInteger("Direction", 0);
             }
+
+            spriteRenderer.flipX = false;
         }
     }
 
@@ -42,11 +113,13 @@ public class ArcherTower : MonoBehaviour
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
         Transform nearest = null;
+
         float minDist = range;
 
         foreach (GameObject enemy in enemies)
         {
-            float dist = Vector2.Distance(transform.position, enemy.transform.position);
+            float dist =
+                Vector2.Distance(transform.position, enemy.transform.position);
 
             if (dist <= minDist)
             {
@@ -60,10 +133,14 @@ public class ArcherTower : MonoBehaviour
 
     void Shoot(Transform target)
     {
-        if (projectilePrefab == null) return;
+        if (projectilePrefab == null)
+            return;
 
-        GameObject projectileObj = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
-        Projectile projectile = projectileObj.GetComponent<Projectile>();
+        GameObject projectileObj =
+            Instantiate(projectilePrefab, transform.position, Quaternion.identity);
+
+        Projectile projectile =
+            projectileObj.GetComponent<Projectile>();
 
         if (projectile != null)
         {

@@ -14,6 +14,14 @@ public class WarriorTower : MonoBehaviour
 
     public GameObject hitEffectPrefab;
 
+    [Header("Animation")]
+    public Animator animator;
+    public SpriteRenderer spriteRenderer;
+
+    private List<EnemyHealth> currentTargets = new List<EnemyHealth>();
+    private bool isAttacking = false;
+    private float lastAttackTime = -999f;
+
     void Start()
     {
         StartCoroutine(AttackRoutine());
@@ -23,36 +31,83 @@ public class WarriorTower : MonoBehaviour
     {
         while (true)
         {
-            List<EnemyHealth> enemies = GetEnemiesIn3x3();
+            if (!isAttacking && Time.time >= lastAttackTime + cooldown)
+            {
+                List<EnemyHealth> enemies = GetEnemiesIn3x3();
 
-            if (enemies.Count > 0)
-            {
-                Attack(enemies);
-                yield return new WaitForSeconds(cooldown);
+                if (enemies.Count > 0)
+                {
+                    SortByDistance(enemies);
+
+                    SetDirection(enemies[0].transform.position - transform.position);
+                    PlayAttack(enemies);
+
+                    lastAttackTime = Time.time;
+                }
+                else
+                {
+                    PlaySpecial();
+                }
             }
-            else
-            {
-                yield return new WaitForSeconds(0.2f);
-            }
+
+            yield return null;
         }
     }
 
-    void Attack(List<EnemyHealth> enemies)
+    void PlayAttack(List<EnemyHealth> enemies)
     {
-        SortByDistance(enemies);
+        currentTargets.Clear();
 
         int hitCount = Mathf.Min(maxHitCount, enemies.Count);
 
         for (int i = 0; i < hitCount; i++)
         {
-            EnemyHealth enemy = enemies[i];
+            currentTargets.Add(enemies[i]);
+        }
 
+        isAttacking = true;
+        animator.SetInteger("State", 1);
+    }
+
+    void PlaySpecial()
+    {
+        animator.SetInteger("State", 0);
+    }
+
+    public void AttackHit()
+    {
+        foreach (EnemyHealth enemy in currentTargets)
+        {
             if (enemy == null)
                 continue;
 
             enemy.TakeDamage(damage);
-
             SpawnEffect(enemy.transform.position);
+        }
+    }
+
+    public void AttackEnd()
+    {
+        isAttacking = false;
+        currentTargets.Clear();
+        animator.SetInteger("State", 0);
+    }
+
+    void SetDirection(Vector2 dir)
+    {
+        if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+        {
+            animator.SetInteger("Direction", 2);
+            spriteRenderer.flipX = dir.x < 0;
+        }
+        else
+        {
+            if (dir.y > 0)
+                animator.SetInteger("Direction", 1);
+            else
+                animator.SetInteger("Direction", 0);
+
+            spriteRenderer.flipX = false;
         }
     }
 
