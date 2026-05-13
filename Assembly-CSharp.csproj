@@ -79,6 +79,7 @@
     <Compile Include="Assets\Unit\TowerShop.cs" />
     <Compile Include="Assets\Script\Item\ItemManager.cs" />
     <Compile Include="Assets\Script\SelectStages\StageSelectManager.cs" />
+    <Compile Include="Assets\Script\GameLog.cs" />
     <Compile Include="Assets\Script\MainMenu\BGMManager.cs" />
     <Compile Include="Assets\Unit\Archer\ArcherTower.cs" />
     <Compile Include="Assets\Script\Map\Stage1\EnemyPathPainterStage1.cs" />
