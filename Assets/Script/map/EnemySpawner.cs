@@ -6,6 +6,7 @@ public class EnemySpawner : MonoBehaviour
     [Header("생성할 적 프리팹")]
     public GameObject enemyPrefab;
 
+
     
     [Header("웨이포인트 생성기")]
     public WaypointGenerator waypointGenerator;
@@ -14,7 +15,8 @@ public class EnemySpawner : MonoBehaviour
     [Header("스폰 포인트 2개")]
     public Transform[] spawnPoints;
 
-    
+
+
     [Header("스폰 설정")]
     public int enemyCount = 10;
     public float spawnInterval = 1.5f;
@@ -24,19 +26,26 @@ public class EnemySpawner : MonoBehaviour
 
     private IEnumerator Start()
     {
-        while (
-            waypointGenerator == null ||
-            waypointGenerator.leftWayPoints == null ||
-            waypointGenerator.leftWayPoints.Length == 0 ||
-            waypointGenerator.rightWayPoints == null ||
-            waypointGenerator.rightWayPoints.Length == 0
-        )
+        if (waypointGenerator == null)
         {
-            yield return null;
+            Debug.LogError("WaypointGenerator가 연결되지 않았습니다.");
+            yield break;
         }
+
+        // 핵심: 스폰 전에 웨이포인트를 먼저 확실히 생성
+        waypointGenerator.GenerateWaypoints();
+
+        yield return null;
 
         leftWayPoints = waypointGenerator.leftWayPoints;
         rightWayPoints = waypointGenerator.rightWayPoints;
+
+        if (leftWayPoints == null || leftWayPoints.Length == 0 ||
+            rightWayPoints == null || rightWayPoints.Length == 0)
+        {
+            Debug.LogError("웨이포인트 생성 실패: left/right 경로가 비어 있습니다.");
+            yield break;
+        }
 
         Debug.Log("경로 연결 완료: " + leftWayPoints.Length + ", " + rightWayPoints.Length);
 
@@ -75,8 +84,6 @@ public class EnemySpawner : MonoBehaviour
             Quaternion.identity
         );
 
-        Debug.Log("적 생성됨: " + selectedSpawnPoint.name);
-
         EnemyMove enemyMove = enemy.GetComponent<EnemyMove>();
 
         if (enemyMove == null)
@@ -93,5 +100,7 @@ public class EnemySpawner : MonoBehaviour
         {
             enemyMove.SetWayPoints(rightWayPoints);
         }
+
+        Debug.Log("적 생성됨: " + selectedSpawnPoint.name);
     }
 }
