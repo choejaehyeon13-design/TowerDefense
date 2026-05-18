@@ -20,7 +20,7 @@ public class ItemManager : MonoBehaviour
         Instance = this;
         
     }
-    void Start() 
+    void Start()
     {
         StartCoroutine(GiveItemLoop());
         UpdateGiveText();
@@ -32,7 +32,6 @@ public class ItemManager : MonoBehaviour
             UseItem();
         }
 
-        
     }
     void UpdateGiveText()
     {
