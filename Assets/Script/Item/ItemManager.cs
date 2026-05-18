@@ -14,7 +14,6 @@ public class ItemManager : MonoBehaviour
     public float TimeSlowLast = 3f;
     public float TeamBuffLast = 2f;
     public int giveUpgradeCost = 10;
-    public Text GiveText;
     void Awake()
     {
         Instance = this;
@@ -23,7 +22,6 @@ public class ItemManager : MonoBehaviour
     void Start()
     {
         StartCoroutine(GiveItemLoop());
-        UpdateGiveText();
     }
     void Update() //스페이스로 아이템 사용
     {
@@ -32,10 +30,6 @@ public class ItemManager : MonoBehaviour
             UseItem();
         }
 
-    }
-    void UpdateGiveText()
-    {
-        GiveText.text = $"지급 주기 : {giveInterval}초 (업그레이드 비용: {giveUpgradeCost} 골드)";
     }
     void UseItem() //아이템 사용
     {
@@ -172,7 +166,6 @@ public class ItemManager : MonoBehaviour
         else {
             Debug.Log("최대 업그레이드");
         }
-        UpdateGiveText();
         
     }
 }
