@@ -1,24 +1,101 @@
 using UnityEngine;
+using System.Collections;
 
 public class ArcherTower : MonoBehaviour
 {
+    [Header("Attack")]
     public GameObject projectilePrefab;
     public float range = 7f;
     public float cooldown = 1f;
     public int damage = 1;
 
-    private float timer = 0f;
+    [Header("Animation")]
+    public Animator animator;
+    public SpriteRenderer spriteRenderer;
 
-    void Update()
+    [Header("Timing")]
+    public float preAttackDelay = 0.15f;
+    public float attackDuration = 0.3f;
+
+    private Transform currentTarget;
+
+    private bool isAttacking = false;
+    private float lastAttackTime = -999f;
+
+    void Start()
     {
-        timer -= Time.deltaTime;
+        StartCoroutine(AttackRoutine());
+    }
 
-        Transform target = FindNearestEnemy();
-
-        if (target != null && timer <= 0f)
+    IEnumerator AttackRoutine()
+    {
+        while (true)
         {
-            Shoot(target);
-            timer = cooldown;
+            if (!isAttacking && Time.time >= lastAttackTime + cooldown)
+            {
+                currentTarget = FindNearestEnemy();
+
+                if (currentTarget != null)
+                {
+                    SetDirection(currentTarget.position - transform.position);
+
+                    StartCoroutine(AttackSequence());
+
+                    lastAttackTime = Time.time;
+                }
+                else
+                {
+                    PlayIdle();
+                }
+            }
+
+            yield return null;
+        }
+    }
+
+    IEnumerator AttackSequence()
+    {
+        isAttacking = true;
+
+        animator.SetInteger("State", 1);
+
+        yield return new WaitForSeconds(preAttackDelay);
+
+        if (currentTarget != null)
+        {
+            Shoot(currentTarget);
+        }
+
+        yield return new WaitForSeconds(attackDuration);
+
+        isAttacking = false;
+        PlayIdle();
+    }
+
+    void PlayIdle()
+    {
+        animator.SetInteger("State", 0);
+    }
+
+    void SetDirection(Vector2 dir)
+    {
+        if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+        {
+            animator.SetInteger("Direction", 2);
+            spriteRenderer.flipX = dir.x < 0;
+        }
+        else
+        {
+            if (dir.y > 0)
+            {
+                animator.SetInteger("Direction", 1);
+            }
+            else
+            {
+                animator.SetInteger("Direction", 0);
+            }
+
+            spriteRenderer.flipX = false;
         }
     }
 
@@ -32,6 +109,7 @@ public class ArcherTower : MonoBehaviour
         foreach (GameObject enemy in enemies)
         {
             float dist = Vector2.Distance(transform.position, enemy.transform.position);
+
             if (dist <= minDist)
             {
                 minDist = dist;
@@ -44,9 +122,14 @@ public class ArcherTower : MonoBehaviour
 
     void Shoot(Transform target)
     {
-        if (projectilePrefab == null) return;
+        if (projectilePrefab == null)
+        {
+            return;
+        }
 
-        GameObject projectileObj = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
+        GameObject projectileObj =
+            Instantiate(projectilePrefab, transform.position, Quaternion.identity);
+
         Projectile projectile = projectileObj.GetComponent<Projectile>();
 
         if (projectile != null)
