@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ItemManager : MonoBehaviour
 {
@@ -18,10 +19,9 @@ public class ItemManager : MonoBehaviour
         Instance = this;
         
     }
-    void Start() 
+    void Start()
     {
         StartCoroutine(GiveItemLoop());
-
     }
     void Update() //스페이스로 아이템 사용
     {
@@ -29,7 +29,7 @@ public class ItemManager : MonoBehaviour
         {
             UseItem();
         }
-        
+
     }
     void UseItem() //아이템 사용
     {
@@ -166,5 +166,6 @@ public class ItemManager : MonoBehaviour
         else {
             Debug.Log("최대 업그레이드");
         }
+        
     }
 }
