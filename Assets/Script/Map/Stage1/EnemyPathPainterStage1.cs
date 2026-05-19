@@ -18,7 +18,7 @@ public class EnemyPathPainter_Stage1 : MonoBehaviour
 
     private void OnEnable()
     {
-        PaintPath();
+        //PaintPath();
     }
 
 #if UNITY_EDITOR
@@ -38,32 +38,36 @@ public class EnemyPathPainter_Stage1 : MonoBehaviour
     {
         if (targetTilemap == null)
         {
-            Debug.LogWarning("EnemyPathPainter: targetTilemap이 비어 있습니다.");
+            Debug.LogWarning("EnemyPathPainter_Stage1: targetTilemap이 비어 있습니다.");
             return;
         }
 
         if (enemyMoveTile == null)
         {
-            Debug.LogWarning("EnemyPathPainter: enemyMoveTile이 비어 있습니다.");
+            Debug.LogWarning("EnemyPathPainter_Stage1: enemyMoveTile이 비어 있습니다.");
             return;
         }
 
         if (waypointGenerator == null)
         {
-            Debug.LogWarning("EnemyPathPainter: waypointGenerator가 비어 있습니다.");
+            Debug.LogWarning("EnemyPathPainter_Stage1: waypointGenerator가 비어 있습니다.");
             return;
         }
 
-        // 핵심: 먼저 웨이포인트를 확실히 생성
-        if (waypointGenerator.leftWayPoints == null || waypointGenerator.leftWayPoints.Length < 2)
+        if (waypointGenerator.wayPoints == null || waypointGenerator.wayPoints.Length < 2)
         {
             waypointGenerator.GenerateWaypoints();
         }
 
+        if (waypointGenerator.wayPoints == null || waypointGenerator.wayPoints.Length < 2)
+        {
+            Debug.LogWarning("EnemyPathPainter_Stage1: 웨이포인트가 부족합니다.");
+            return;
+        }
+
         targetTilemap.ClearAllTiles();
 
-        // Stage1은 왼쪽 경로만 그림
-        DrawPath(waypointGenerator.leftWayPoints);
+        DrawPath(waypointGenerator.wayPoints);
 
         targetTilemap.RefreshAllTiles();
 

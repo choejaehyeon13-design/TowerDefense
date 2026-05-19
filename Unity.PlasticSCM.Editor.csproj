@@ -374,9 +374,9 @@
     <Compile Include="Library\PackageCache\com.unity.collab-proxy@2.12.4\Editor\CodeEditor\Rendering\CollapsedLineSection.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy@2.12.4\Editor\AssetOverlays\DrawProjectOverlay.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy@2.12.4\Editor\UI\Errors\ErrorListViewItem.cs" />
-    <Compile Include="Library\PackageCache\com.unity.collab-proxy@2.12.4\Editor\CodeEditor\Utils\ImmutableStack.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy@2.12.4\Editor\Views\Shelves\ShelveListViewItem.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy@2.12.4\Editor\Views\PendingChanges\PendingChangesStatusSuccessNotificationContent.cs" />
+    <Compile Include="Library\PackageCache\com.unity.collab-proxy@2.12.4\Editor\CodeEditor\Utils\ImmutableStack.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy@2.12.4\Editor\Configuration\EncryptionConfigurationDialog.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy@2.12.4\Editor\Views\History\HistoryListViewItem.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy@2.12.4\Editor\AssetMenu\Dialogs\CheckinDialog.cs" />

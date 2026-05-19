@@ -6,23 +6,17 @@ public class EnemySpawner_Stage1 : MonoBehaviour
     [Header("생성할 적 프리팹")]
     public GameObject enemyPrefab;
 
-
-    
     [Header("웨이포인트 생성기")]
     public WaypointGenerator_Stage1 waypointGenerator;
 
-    
-    [Header("스폰 포인트 2개")]
+    [Header("스폰 포인트")]
     public Transform[] spawnPoints;
-
-
 
     [Header("스폰 설정")]
     public int enemyCount = 10;
     public float spawnInterval = 1.5f;
 
-    private Transform[] leftWayPoints;
-    private Transform[] rightWayPoints;
+    private Transform[] wayPoints;
 
     private IEnumerator Start()
     {
@@ -32,22 +26,17 @@ public class EnemySpawner_Stage1 : MonoBehaviour
             yield break;
         }
 
-        // 핵심: 스폰 전에 웨이포인트를 먼저 확실히 생성
         waypointGenerator.GenerateWaypoints();
 
         yield return null;
 
-        leftWayPoints = waypointGenerator.leftWayPoints;
-        rightWayPoints = waypointGenerator.rightWayPoints;
+        wayPoints = waypointGenerator.wayPoints;
 
-        if (leftWayPoints == null || leftWayPoints.Length == 0 ||
-            rightWayPoints == null || rightWayPoints.Length == 0)
+        if (wayPoints == null || wayPoints.Length == 0)
         {
-            Debug.LogError("웨이포인트 생성 실패: left/right 경로가 비어 있습니다.");
+            Debug.LogError("EnemySpawner_Stage1 웨이포인트가 비어있습니다.");
             yield break;
         }
-
-        Debug.Log("경로 연결 완료: " + leftWayPoints.Length + ", " + rightWayPoints.Length);
 
         StartCoroutine(SpawnEnemies());
     }
@@ -69,14 +58,13 @@ public class EnemySpawner_Stage1 : MonoBehaviour
             return;
         }
 
-        if (spawnPoints == null || spawnPoints.Length < 2)
+        if (spawnPoints == null || spawnPoints.Length < 1)
         {
-            Debug.LogError("Spawn Points 2개를 연결해야 합니다.");
+            Debug.LogError("Spawn Point 1개를 연결해야 합니다.");
             return;
         }
 
-        int randomIndex = Random.Range(0, 2);
-        Transform selectedSpawnPoint = spawnPoints[randomIndex];
+        Transform selectedSpawnPoint = spawnPoints[0];
 
         GameObject enemy = Instantiate(
             enemyPrefab,
@@ -92,14 +80,7 @@ public class EnemySpawner_Stage1 : MonoBehaviour
             return;
         }
 
-        if (randomIndex == 0)
-        {
-            enemyMove.SetWayPoints(leftWayPoints);
-        }
-        else
-        {
-            enemyMove.SetWayPoints(rightWayPoints);
-        }
+        enemyMove.SetWayPoints(wayPoints);
 
         Debug.Log("적 생성됨: " + selectedSpawnPoint.name);
     }
