@@ -70,8 +70,9 @@ public class EnemySpawner_Stage1 : MonoBehaviour
             enemyPrefab,
             selectedSpawnPoint.position,
             Quaternion.identity
+            
         );
-
+        Debug.Log("Stage1 웨이포인트 생성 완료");
         EnemyMove enemyMove = enemy.GetComponent<EnemyMove>();
 
         if (enemyMove == null)

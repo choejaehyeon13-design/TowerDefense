@@ -20,6 +20,10 @@ public class EnemyPathPainter_Stage1 : MonoBehaviour
     {
         //PaintPath();
     }
+    private void Start()
+    {
+        PaintPath();
+    }    
 
 #if UNITY_EDITOR
     private void OnValidate()

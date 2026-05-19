@@ -35,13 +35,12 @@ public class WaypointGenerator_Stage1 : MonoBehaviour
                 Quaternion.identity,
                 transform
             );
-
             point.name = "WayPoint" + i;
 
             wayPoints[i] = point.transform;
         }
 
-        Debug.Log("Stage1 웨이포인트 생성 완료");
+       
     }
 
     private void ClearWaypoints()
