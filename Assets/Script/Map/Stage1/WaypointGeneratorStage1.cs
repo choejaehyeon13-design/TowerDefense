@@ -1,9 +1,13 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class WaypointGenerator_Stage1 : MonoBehaviour
 {
     [Header("웨이포인트 프리팹")]
     public GameObject waypointPrefab;
+
+    [Header("적 이동 경로 타일맵")]
+    public Tilemap pathTilemap;
 
     [Header("자동 생성된 웨이포인트")]
     public Transform[] wayPoints;
@@ -25,22 +29,30 @@ public class WaypointGenerator_Stage1 : MonoBehaviour
             new Vector3(6, 0, 0),
             new Vector3(15, 0, 0)
         };
+
         wayPoints = new Transform[path.Length];
 
         for (int i = 0; i < path.Length; i++)
         {
+            Vector3 spawnPosition = path[i];
+
+            // 타일맵이 연결되어 있으면 해당 좌표가 속한 타일의 중앙으로 보정
+            if (pathTilemap != null)
+            {
+                Vector3Int cellPosition = pathTilemap.WorldToCell(path[i]);
+                spawnPosition = pathTilemap.GetCellCenterWorld(cellPosition);
+            }
+
             GameObject point = Instantiate(
                 waypointPrefab,
-                path[i],
+                spawnPosition,
                 Quaternion.identity,
                 transform
             );
-            point.name = "WayPoint" + i;
 
+            point.name = "WayPoint" + i;
             wayPoints[i] = point.transform;
         }
-
-       
     }
 
     private void ClearWaypoints()

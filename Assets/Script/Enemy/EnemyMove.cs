@@ -13,6 +13,12 @@ public class EnemyMove : MonoBehaviour
     {
         wayPoints = points;
         currentIndex = 0;
+
+        // 첫 웨이포인트 위치로 적을 정확히 맞춤
+        if (wayPoints != null && wayPoints.Length > 0)
+        {
+            transform.position = wayPoints[0].position;
+        }
     }
 
     private void Update()
@@ -30,18 +36,18 @@ public class EnemyMove : MonoBehaviour
             return;
         }
 
-        // 현재 목표 웨이포인트
-        Transform target = wayPoints[currentIndex];
+        // 현재 목표 웨이포인트 위치
+        Vector3 targetPosition = wayPoints[currentIndex].position;
 
-        // 목표 지점으로 이동
+        // 목표 웨이포인트로 이동
         transform.position = Vector3.MoveTowards(
             transform.position,
-            target.position,
+            targetPosition,
             speed * Time.deltaTime
         );
 
         // 목표 지점에 거의 도착하면 다음 웨이포인트로 이동
-        if (Vector3.Distance(transform.position, target.position) < 0.05f)
+        if (Vector3.Distance(transform.position, targetPosition) < 0.05f)
         {
             currentIndex++;
         }
