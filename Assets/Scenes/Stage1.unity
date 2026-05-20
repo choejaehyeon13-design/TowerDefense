@@ -1834,6 +1834,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waypointPrefab: {fileID: 1727833324459583088, guid: 0079a02006999ef4391b4810734abfe6, type: 3}
+  pathTilemap: {fileID: 935804654}
   wayPoints:
   - {fileID: 0}
   - {fileID: 0}
