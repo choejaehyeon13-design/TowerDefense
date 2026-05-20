@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ItemManager : MonoBehaviour
 {
@@ -9,11 +8,14 @@ public class ItemManager : MonoBehaviour
     public float startDelay = 1f;
     public ItemType currentItem = ItemType.None;
     public MageTower cooldown;
-    public float dragonRadius = 3f;
+    public float dragonRadius = 2f;
     public int dragonDamage = 3;
     public float TimeSlowLast = 3f;
     public float TeamBuffLast = 2f;
     public int giveUpgradeCost = 10;
+    public GameObject DragonRangeCircle;
+    public bool isDragonActive = false;
+
     void Awake()
     {
         Instance = this;
@@ -29,7 +31,28 @@ public class ItemManager : MonoBehaviour
         {
             UseItem();
         }
+        if (isDragonActive)
+        {
+        Vector2 pos =
+            Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
+        DragonRangeCircle.SetActive(true);
+
+        DragonRangeCircle.transform.position = pos;
+
+        DragonRangeCircle.transform.localScale =
+            Vector3.one * dragonRadius * 2;
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                UseDragon(pos);
+
+                DragonRangeCircle.SetActive(false);
+
+                isDragonActive = false;
+            }
+
+        }
     }
     void UseItem() //아이템 사용
     {
@@ -38,7 +61,7 @@ public class ItemManager : MonoBehaviour
         {
             case ItemType.Dragon:
                 Debug.Log("드래곤 사용");
-                UseDragon();
+                isDragonActive = true;
                 break;
             case ItemType.PlayerHeal:
                 GameManager.Instance.life += 2;
@@ -57,10 +80,8 @@ public class ItemManager : MonoBehaviour
         currentItem = ItemType.None;
         InventoryManager.Instance.setInven(ItemType.None);
     }
-    void UseDragon() //드래곤 사용
+    void UseDragon(Vector2 pos) //드래곤 사용
     {
-        
-        Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         
         Collider2D[] hits = Physics2D.OverlapCircleAll(pos, dragonRadius);
 
