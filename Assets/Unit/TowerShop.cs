@@ -2,34 +2,16 @@ using UnityEngine;
 
 public class TowerShop : MonoBehaviour
 {
-    public static TowerShop Instance;
-
     public GameObject selectedTowerPrefab;
     public int selectedTowerCost;
 
-    void Awake()
+    public void SelectTower()
     {
-        Instance = this;
-    }
+        Debug.Log("버튼 눌림");
 
-    public void SelectArcher(GameObject archerPrefab)
-    {
-        selectedTowerPrefab = archerPrefab;
-        selectedTowerCost = 10;
-        Debug.Log("아쳐타워 선택됨");
-    }
+        TowerPlacer.selectedTowerPrefab = selectedTowerPrefab;
+        TowerPlacer.selectedTowerCost = selectedTowerCost;
 
-    public void SelectMage(GameObject magePrefab)
-    {
-        selectedTowerPrefab = magePrefab;
-        selectedTowerCost = 30;
-        Debug.Log("마법사타워 선택됨");
-    }
-
-    public void SelectWarrior(GameObject warriorPrefab)
-    {
-        selectedTowerPrefab = warriorPrefab;
-        selectedTowerCost = 40;
-        Debug.Log("전사타워 선택됨");
+        Debug.Log(selectedTowerPrefab.name + " 선택됨 / 가격: " + selectedTowerCost);
     }
 }
