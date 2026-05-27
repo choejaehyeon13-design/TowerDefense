@@ -11,7 +11,7 @@ public class ItemManager : MonoBehaviour
     public float dragonRadius = 2f;
     public int dragonDamage = 3;
     public float TimeSlowLast = 3f;
-    public float TeamBuffLast = 2f;
+    public float TeamBuffLast = 10f;
     public int giveUpgradeCost = 10;
     public GameObject DragonRangeCircle;
     public bool isDragonActive = false;
@@ -120,32 +120,32 @@ public class ItemManager : MonoBehaviour
         MageTower[] mage = FindObjectsOfType<MageTower>();
         WarriorTower[] warrior = FindObjectsOfType<WarriorTower>();
 
-        foreach (var aRange in archer)
+        foreach (var aCool in archer)
         {
-            aRange.range += 2f;
+            aCool.cooldown -= 0.7f;
         }
-        foreach (var mRange in mage)
+        foreach (var mCool in mage)
         {
-            mRange.range += 2f;
+            mCool.cooldown -= 0.7f;
         }
-        foreach (var wRadius in warrior)
+        foreach (var wCool in warrior)
         {
-            wRadius.radius += 2f;
+            wCool.cooldown -= 0.7f;
         }
 
         yield return new WaitForSeconds(TeamBuffLast);
 
-        foreach (var aRange in archer)
+        foreach (var aCool in archer)
         {
-            aRange.range -= 2f;
+            aCool.cooldown += 0.7f;
         }
-        foreach (var mRange in mage)
+        foreach (var mCool in mage)
         {
-            mRange.range -= 2f;
+            mCool.cooldown += 0.7f;
         }
-        foreach (var wRadius in warrior)
+        foreach (var wCool in warrior)
         {
-            wRadius.radius -= 2f;
+            wCool.cooldown += 0.7f;
         }
     }
     IEnumerator GiveItemLoop() //아이템 지급 딜레이
