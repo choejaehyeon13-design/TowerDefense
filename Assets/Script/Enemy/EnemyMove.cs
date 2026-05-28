@@ -32,6 +32,7 @@ public class EnemyMove : MonoBehaviour
         // 모든 웨이포인트를 지나면 적 삭제
         if (currentIndex >= wayPoints.Length)
         {
+            GameManager.Instance.TakeLife(1);
             Destroy(gameObject);
             return;
         }

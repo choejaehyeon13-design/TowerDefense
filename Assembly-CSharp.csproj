@@ -69,6 +69,7 @@
     <Compile Include="Assets\Script\player\Bullet.cs" />
     <Compile Include="Assets\Script\Map\Stage1\WaypointGeneratorStage1.cs" />
     <Compile Include="Assets\Script\player\TowerAttack.cs" />
+    <Compile Include="Assets\Script\Item\CameraShake.cs" />
     <Compile Include="Assets\Script\Core\GameManager.cs" />
     <Compile Include="Assets\Script\Enemy\EnemyHealth.cs" />
     <Compile Include="Assets\Script\Item\InventoryManager.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Assets\Script\ClickCircle.cs" />
     <Compile Include="Assets\Unit\Mage\EffectAutoDestroy.cs" />
     <Compile Include="Assets\Script\Map\Stage1\WayPointStage1.cs" />
+    <Compile Include="Assets\Script\Item\DragonEffect.cs" />
     <Compile Include="Assets\Script\Map\Stage1\TowerDeploymanageStage1.cs" />
     <Compile Include="Assets\Script\MainMenu\MainMenuManager.cs" />
     <Compile Include="Assets\Script\Item\ItemType.cs" />
