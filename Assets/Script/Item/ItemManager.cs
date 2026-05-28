@@ -15,7 +15,8 @@ public class ItemManager : MonoBehaviour
     public int giveUpgradeCost = 10;
     public GameObject DragonRangeCircle;
     public bool isDragonActive = false;
-
+    public GameObject dragonEffectPrefab;
+    
     void Awake()
     {
         Instance = this;
@@ -65,6 +66,7 @@ public class ItemManager : MonoBehaviour
                 break;
             case ItemType.PlayerHeal:
                 GameManager.Instance.life += 2;
+                GameManager.Instance.UpdateUI();
                 Debug.Log("체력 회복");
                 break;
             case ItemType.TeamBuff:
@@ -80,24 +82,35 @@ public class ItemManager : MonoBehaviour
         currentItem = ItemType.None;
         InventoryManager.Instance.setInven(ItemType.None);
     }
-    void UseDragon(Vector2 pos) //드래곤 사용
+    void UseDragon(Vector2 pos)
+{
+    // 드래곤 이펙트
+    if (dragonEffectPrefab != null)
     {
-        
-        Collider2D[] hits = Physics2D.OverlapCircleAll(pos, dragonRadius);
+        GameObject effect = Instantiate(dragonEffectPrefab, pos, Quaternion.identity);
+        effect.GetComponent<DragonEffect>().maxRadius = dragonRadius;
+    }
 
-        foreach (var hit in hits)
+    // 화면 흔들림
+    if (CameraShake.Instance != null)
+    {
+        StartCoroutine(CameraShake.Instance.Shake(0.3f, 0.2f));
+    }
+
+    // 기존 데미지 로직
+    Collider2D[] hits = Physics2D.OverlapCircleAll(pos, dragonRadius);
+    foreach (var hit in hits)
+    {
+        if (hit.CompareTag("Enemy"))
         {
-            if (hit.CompareTag("Enemy"))
+            EnemyHealth enemy = hit.GetComponent<EnemyHealth>();
+            if (enemy != null)
             {
-                EnemyHealth enemy = hit.GetComponent<EnemyHealth>();
-                
-                if (enemy != null)
-                {
-                    enemy.TakeDamage(dragonDamage);
-                }
+                enemy.TakeDamage(dragonDamage);
             }
         }
     }
+}
     IEnumerator TimeSlow() //슬로우 사용
     {
         EnemyMove[] enemies = FindObjectsOfType<EnemyMove>();
@@ -114,11 +127,10 @@ public class ItemManager : MonoBehaviour
             move.speed += 1f;
         }
     }
-    IEnumerator TeamBuff() //팀버프 사용
+    IEnumerator TeamBuff()
     {
         ArcherTower[] archer = FindObjectsOfType<ArcherTower>();
         MageTower[] mage = FindObjectsOfType<MageTower>();
-        WarriorTower[] warrior = FindObjectsOfType<WarriorTower>();
 
         foreach (var aCool in archer)
         {
@@ -127,10 +139,6 @@ public class ItemManager : MonoBehaviour
         foreach (var mCool in mage)
         {
             mCool.cooldown -= 0.7f;
-        }
-        foreach (var wCool in warrior)
-        {
-            wCool.cooldown -= 0.7f;
         }
 
         yield return new WaitForSeconds(TeamBuffLast);
@@ -142,10 +150,6 @@ public class ItemManager : MonoBehaviour
         foreach (var mCool in mage)
         {
             mCool.cooldown += 0.7f;
-        }
-        foreach (var wCool in warrior)
-        {
-            wCool.cooldown += 0.7f;
         }
     }
     IEnumerator GiveItemLoop() //아이템 지급 딜레이
