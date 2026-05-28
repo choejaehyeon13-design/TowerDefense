@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public GameObject gameOverPanel;
     public TextMeshProUGUI gameOverText;
     private float lastTakeLifeTime = -1f;
+    private float lastAddScoreTime = -1f;
 
     private bool isGameOver = false;
 
@@ -35,7 +36,8 @@ public class GameManager : MonoBehaviour
     public void AddScore(int amount)
     {
         if (isGameOver) return;
-
+        if (Time.time - lastTakeLifeTime < 0.1f) return;
+        lastTakeLifeTime = Time.time;
         score += amount;
         UpdateUI();
     }
@@ -43,8 +45,6 @@ public class GameManager : MonoBehaviour
     public void TakeLife(int amount)
     {
         if (isGameOver) return;
-        
-        // 0.1초 안에 또 호출되면 무시
         if (Time.time - lastTakeLifeTime < 0.1f) return;
         lastTakeLifeTime = Time.time;
 

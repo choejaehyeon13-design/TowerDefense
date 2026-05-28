@@ -26,6 +26,7 @@ public class EnemyHealth : MonoBehaviour
     {
         // 골드 지급
         Gold.Instance.AddGold(goldValue);
+        GameManager.Instance.AddScore(1);
 
         Destroy(gameObject);
     }
