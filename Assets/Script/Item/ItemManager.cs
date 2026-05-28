@@ -11,11 +11,11 @@ public class ItemManager : MonoBehaviour
     public float dragonRadius = 2f;
     public int dragonDamage = 3;
     public float TimeSlowLast = 3f;
-    public float TeamBuffLast = 2f;
+    public float TeamBuffLast = 10f;
     public int giveUpgradeCost = 10;
     public GameObject DragonRangeCircle;
     public bool isDragonActive = false;
-    public GameObject dragonEffectPrefab;
+
     void Awake()
     {
         Instance = this;
@@ -65,7 +65,6 @@ public class ItemManager : MonoBehaviour
                 break;
             case ItemType.PlayerHeal:
                 GameManager.Instance.life += 2;
-                GameManager.Instance.UpdateUI();
                 Debug.Log("체력 회복");
                 break;
             case ItemType.TeamBuff:
@@ -81,35 +80,24 @@ public class ItemManager : MonoBehaviour
         currentItem = ItemType.None;
         InventoryManager.Instance.setInven(ItemType.None);
     }
-    void UseDragon(Vector2 pos)
-{
-    // 드래곤 이펙트
-    if (dragonEffectPrefab != null)
+    void UseDragon(Vector2 pos) //드래곤 사용
     {
-        GameObject effect = Instantiate(dragonEffectPrefab, pos, Quaternion.identity);
-        effect.GetComponent<DragonEffect>().maxRadius = dragonRadius;
-    }
+        
+        Collider2D[] hits = Physics2D.OverlapCircleAll(pos, dragonRadius);
 
-    // 화면 흔들림
-    if (CameraShake.Instance != null)
-    {
-        StartCoroutine(CameraShake.Instance.Shake(0.3f, 0.2f));
-    }
-
-    // 기존 데미지 로직
-    Collider2D[] hits = Physics2D.OverlapCircleAll(pos, dragonRadius);
-    foreach (var hit in hits)
-    {
-        if (hit.CompareTag("Enemy"))
+        foreach (var hit in hits)
         {
-            EnemyHealth enemy = hit.GetComponent<EnemyHealth>();
-            if (enemy != null)
+            if (hit.CompareTag("Enemy"))
             {
-                enemy.TakeDamage(dragonDamage);
+                EnemyHealth enemy = hit.GetComponent<EnemyHealth>();
+                
+                if (enemy != null)
+                {
+                    enemy.TakeDamage(dragonDamage);
+                }
             }
         }
     }
-}
     IEnumerator TimeSlow() //슬로우 사용
     {
         EnemyMove[] enemies = FindObjectsOfType<EnemyMove>();
@@ -130,26 +118,34 @@ public class ItemManager : MonoBehaviour
     {
         ArcherTower[] archer = FindObjectsOfType<ArcherTower>();
         MageTower[] mage = FindObjectsOfType<MageTower>();
+        WarriorTower[] warrior = FindObjectsOfType<WarriorTower>();
 
-        foreach (var aRange in archer)
+        foreach (var aCool in archer)
         {
-            aRange.range += 2f;
+            aCool.cooldown -= 0.7f;
         }
-        foreach (var mRange in mage)
+        foreach (var mCool in mage)
         {
-            mRange.range += 2f;
+            mCool.cooldown -= 0.7f;
         }
-
+        foreach (var wCool in warrior)
+        {
+            wCool.cooldown -= 0.7f;
+        }
 
         yield return new WaitForSeconds(TeamBuffLast);
 
-        foreach (var aRange in archer)
+        foreach (var aCool in archer)
         {
-            aRange.range -= 2f;
+            aCool.cooldown += 0.7f;
         }
-        foreach (var mRange in mage)
+        foreach (var mCool in mage)
         {
-            mRange.range -= 2f;
+            mCool.cooldown += 0.7f;
+        }
+        foreach (var wCool in warrior)
+        {
+            wCool.cooldown += 0.7f;
         }
     }
     IEnumerator GiveItemLoop() //아이템 지급 딜레이
