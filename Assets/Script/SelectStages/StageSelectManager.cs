@@ -28,7 +28,7 @@ public class StageSelectManager : MonoBehaviour
     public void OnClickDifficulty()
     {
         SFXManager.instance.PlayClick();
-        string sceneName = "Stage" + selectedStage;
+        string sceneName = "Stage1";
         SceneManager.LoadScene(sceneName);
     }
     // 뒤로가기 (패널 닫기)
