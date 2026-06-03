@@ -103,6 +103,7 @@
     <Compile Include="Assets\Script\Item\ItemType.cs" />
     <Compile Include="Assets\Script\Enemy\EnemyMove.cs" />
     <Compile Include="Assets\Script\Result\GameResultData.cs" />
+    <Compile Include="Assets\Script\UI\PlayTimeClock.cs" />
     <Compile Include="Assets\FindMissingScripts.cs" />
     <Compile Include="Assets\Unit\Gold.cs" />
   </ItemGroup>
