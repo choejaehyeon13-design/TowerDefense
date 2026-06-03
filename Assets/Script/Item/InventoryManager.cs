@@ -21,8 +21,6 @@ public class InventoryManager : MonoBehaviour
 
     public void setInven(ItemType item) //아이템 획득시 currentItem 갱신
     {
-        Debug.Log("아이템 획득: " + item);
-
         slot.SetItem(item);
     }
 

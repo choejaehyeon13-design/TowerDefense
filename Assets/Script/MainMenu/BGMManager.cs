@@ -1,52 +1,76 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BGMManager : MonoBehaviour
 {
     public static BGMManager instance;
 
     public AudioSource audioSource;
-    public AudioClip bgmClip;
+
+    [Header("BGM Clips")]
+    public AudioClip menuBGM;
+    public AudioClip stageBGM;
+    public AudioClip victoryBGM;
+    public AudioClip defeatBGM;
 
     void Awake()
     {
-
-        // ▶ 싱글톤 (중복 방지)
         if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
 
             audioSource = GetComponent<AudioSource>();
-            
-            
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
             Destroy(gameObject);
-        }   }
-        void Start()
+        }
+    }
+
+    void Start()
     {
-        if (!audioSource.isPlaying)
+        PlayBGM(menuBGM);
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "MainMenu" || scene.name == "SelectStages")
         {
-            audioSource.clip = bgmClip;
-            audioSource.loop = true;
-            audioSource.Play();
+            PlayBGM(menuBGM);
+        }
+        else if (scene.name == "Stage1")
+        {
+            PlayBGM(stageBGM); 
+            // 게임 중 무음으로 하고 싶으면 StopBGM(); 사용
         }
 
-        Debug.Log("BGM START PLAY: " + audioSource.isPlaying);
     }
-        // 🎚️ 볼륨
+
+    public void PlayBGM(AudioClip clip)
+    {
+        if (audioSource.clip == clip && audioSource.isPlaying)
+            return;
+        audioSource.Stop();
+        audioSource.clip = clip;
+        audioSource.loop = true;
+        audioSource.Play();
+    }
+
+    public void StopBGM()
+    {
+        audioSource.Stop();
+        audioSource.clip = null;
+    }
+
     public void SetVolume(float value)
     {
         audioSource.volume = value;
     }
 
-    // 🔇 음소거
     public void SetMute(bool isMute)
     {
         audioSource.mute = isMute;
     }
-    
 }

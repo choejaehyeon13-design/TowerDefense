@@ -18,9 +18,7 @@ public class ArcherTower : MonoBehaviour
     public float attackDuration = 0.3f;
 
     private Transform currentTarget;
-
     private bool isAttacking = false;
-    private float lastAttackTime = -999f;
 
     void Start()
     {
@@ -31,21 +29,17 @@ public class ArcherTower : MonoBehaviour
     {
         while (true)
         {
-            if (!isAttacking && Time.time >= lastAttackTime + cooldown)
+            if (!isAttacking)
             {
-                currentTarget = FindNearestEnemy();
+                if (currentTarget == null || !IsTargetValid(currentTarget))
+                {
+                    currentTarget = FindNearestEnemy();
+                }
 
                 if (currentTarget != null)
                 {
-                    SetDirection(currentTarget.position - transform.position);
-
-                    StartCoroutine(AttackSequence());
-
-                    lastAttackTime = Time.time;
-                }
-                else
-                {
-                    PlayIdle();
+                    yield return StartCoroutine(Attack(currentTarget));
+                    yield return new WaitForSeconds(cooldown);
                 }
             }
 
@@ -53,49 +47,64 @@ public class ArcherTower : MonoBehaviour
         }
     }
 
-    IEnumerator AttackSequence()
+    IEnumerator Attack(Transform target)
     {
         isAttacking = true;
 
-        animator.SetInteger("State", 1);
+        if (animator != null)
+        {
+            animator.SetBool("isAttacking", true);
+        }
 
         yield return new WaitForSeconds(preAttackDelay);
 
-        if (currentTarget != null)
+        if (target != null && IsTargetValid(target))
         {
-            Shoot(currentTarget);
+            Shoot(target);
         }
 
         yield return new WaitForSeconds(attackDuration);
 
-        isAttacking = false;
-        PlayIdle();
-    }
-
-    void PlayIdle()
-    {
-        animator.SetInteger("State", 0);
-    }
-
-    void SetDirection(Vector2 dir)
-    {
-        if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+        if (animator != null)
         {
-            animator.SetInteger("Direction", 2);
-            spriteRenderer.flipX = dir.x < 0;
+            animator.SetBool("isAttacking", false);
         }
-        else
-        {
-            if (dir.y > 0)
-            {
-                animator.SetInteger("Direction", 1);
-            }
-            else
-            {
-                animator.SetInteger("Direction", 0);
-            }
 
-            spriteRenderer.flipX = false;
+        isAttacking = false;
+    }
+
+    bool IsTargetValid(Transform target)
+    {
+        if (target == null)
+            return false;
+
+        float distance = Vector2.Distance(transform.position, target.position);
+
+        if (distance > range)
+            return false;
+
+        if (!target.CompareTag("Enemy"))
+            return false;
+
+        return true;
+    }
+
+    void Shoot(Transform target)
+    {
+        if (projectilePrefab == null || target == null)
+            return;
+
+        GameObject projectile = Instantiate(
+            projectilePrefab,
+            transform.position,
+            Quaternion.identity
+        );
+
+        Projectile p = projectile.GetComponent<Projectile>();
+
+        if (p != null)
+        {
+            p.SetTarget(target, damage);
         }
     }
 
@@ -104,37 +113,25 @@ public class ArcherTower : MonoBehaviour
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
         Transform nearest = null;
-        float minDist = range;
+        float minDistance = range;
 
         foreach (GameObject enemy in enemies)
         {
-            float dist = Vector2.Distance(transform.position, enemy.transform.position);
+            if (enemy == null)
+                continue;
 
-            if (dist <= minDist)
+            float distance = Vector2.Distance(
+                transform.position,
+                enemy.transform.position
+            );
+
+            if (distance <= minDistance)
             {
-                minDist = dist;
+                minDistance = distance;
                 nearest = enemy.transform;
             }
         }
 
         return nearest;
-    }
-
-    void Shoot(Transform target)
-    {
-        if (projectilePrefab == null)
-        {
-            return;
-        }
-
-        GameObject projectileObj =
-            Instantiate(projectilePrefab, transform.position, Quaternion.identity);
-
-        Projectile projectile = projectileObj.GetComponent<Projectile>();
-
-        if (projectile != null)
-        {
-            projectile.SetTarget(target, damage);
-        }
     }
 }
