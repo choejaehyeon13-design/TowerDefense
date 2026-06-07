@@ -1894,7 +1894,7 @@ MonoBehaviour:
   giveUpgradeCost: 10
   DragonRangeCircle: {fileID: 603682171}
   isDragonActive: 0
-  dragonEffectPrefab: {fileID: 0}
+  dragonEffectPrefab: {fileID: 6533594954622964313, guid: e8e7c218ddc37354298bd826fdea41f1, type: 3}
 --- !u!4 &385241097
 Transform:
   m_ObjectHideFlags: 0
@@ -1921,6 +1921,7 @@ GameObject:
   - component: {fileID: 525630956}
   - component: {fileID: 525630955}
   - component: {fileID: 525630954}
+  - component: {fileID: 525630957}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2002,6 +2003,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &525630957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 525630953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d53bc7cd33328c74d8d324109d112ce3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &544603001
 PrefabInstance:
   m_ObjectHideFlags: 0
