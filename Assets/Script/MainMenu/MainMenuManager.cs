@@ -30,7 +30,7 @@ public class MainMenuManager : MonoBehaviour
         // ▶ 빌드된 게임에서 종료
         Application.Quit();
 
-        // ▶ 유니티 에디터에서 플레이 종료
+        // ▶ 조건부 컴파일 유니티 에디터에서 플레이 종료
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #endif

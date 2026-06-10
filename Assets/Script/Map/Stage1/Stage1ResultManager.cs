@@ -23,7 +23,7 @@ public class Stage1ResultManager : MonoBehaviour
     {
         GameResultData.isClear = true;
         GameResultData.score = Gold.Instance.gold; // 실제 골드
-        GameResultData.wave = killCount;           // 임시로 적 처치 수 표시
+        GameResultData.wave = killCount/2;           // 임시로 적 처치 수 표시
         GameResultData.playTime = playTime;
 
         SceneManager.LoadScene("ResultScene");
@@ -33,7 +33,7 @@ public class Stage1ResultManager : MonoBehaviour
     {
         GameResultData.isClear = false;
         GameResultData.score = Gold.Instance.gold;
-        GameResultData.wave = killCount;
+        GameResultData.wave = killCount/2;
         GameResultData.playTime = playTime;
 
         SceneManager.LoadScene("ResultScene");

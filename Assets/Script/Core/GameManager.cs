@@ -116,6 +116,13 @@ public class GameManager : MonoBehaviour
     {
         isGameOver = true;
 
+
+        Stage1ResultManager resultManager = FindObjectOfType<Stage1ResultManager>();
+
+        if (resultManager != null)
+        {
+            resultManager.GoDefeat();
+        }
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(true);
