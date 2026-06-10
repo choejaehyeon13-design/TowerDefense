@@ -96,10 +96,8 @@
     <Compile Include="Assets\Script\ClickCircle.cs" />
     <Compile Include="Assets\Unit\Mage\EffectAutoDestroy.cs" />
     <Compile Include="Assets\Script\Map\Stage1\WayPointStage1.cs" />
-
     <Compile Include="Assets\Script\Map\Stage1\Stage1ResultManager.cs" />
     <Compile Include="Assets\Script\Item\DragonEffect.cs" />
-    
     <Compile Include="Assets\Script\Map\Stage1\TowerDeploymanageStage1.cs" />
     <Compile Include="Assets\Script\MainMenu\MainMenuManager.cs" />
     <Compile Include="Assets\Script\Item\ItemType.cs" />

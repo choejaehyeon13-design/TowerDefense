@@ -67,11 +67,12 @@ public class GameManager : MonoBehaviour
     {
         isGameOver = true;
 
-        if (gameOverPanel != null)
-            gameOverPanel.SetActive(true);
+        Stage1ResultManager resultManager = FindObjectOfType<Stage1ResultManager>();
 
-        if (gameOverText != null)
-            gameOverText.text = "GAME OVER";
+        if (resultManager != null)
+        {
+            resultManager.GoDefeat();
+        }
     }
 
     public bool IsGameOver()

@@ -62,9 +62,9 @@ public class EndingSceneManager : MonoBehaviour
         }
 
         // 결과 데이터 출력
-        scoreText.text = "" + GameResultData.score;
-        waveText.text = "" + GameResultData.wave;
-        playTimeText.text = "" + FormatTime(GameResultData.playTime);
+        scoreText.text = "" + GameResultData.score; //골드
+        waveText.text = "" + GameResultData.wave; //킬
+        playTimeText.text = "" + FormatTime(GameResultData.playTime); // 플레이 시간은 MM:SS 형식으로 변환하여 표시
     }
 
     // 플레이 시간을 MM:SS 형식으로 변환
