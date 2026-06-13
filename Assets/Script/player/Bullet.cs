@@ -1,61 +1,89 @@
 using UnityEngine;
 
-// ÃÑ¾Ë ÀÌµ¿ ¹× Àû Ãæµ¹ Ã³¸®¸¦ ´ã´çÇÏ´Â ½ºÅ©¸³Æ®
+// ì´ì•Œ ì´ë™ ë° ì  ê³µê²© ì²˜ë¦¬ ìŠ¤í¬ë¦½íŠ¸
 public class Bullet : MonoBehaviour
 {
-    // ÃÑ¾Ë ÀÌµ¿ ¼Óµµ
+    [Header("ì´ì•Œ ì´ë™ ì†ë„")]
     public float speed = 4f;
 
-    // ÃÑ¾Ë µ¥¹ÌÁö
+    [Header("ì´ì•Œ ë°ë¯¸ì§€")]
     public int damage = 1;
 
-    // ÃÑ¾ËÀÌ µû¶ó°¥ ¸ñÇ¥ Àû
+    [Header("íƒ€ê²© íŒì • ê±°ë¦¬")]
+    public float hitDistance = 0.15f;
+
     private Transform target;
 
-    // Å¸¿ö°¡ »ı¼º Á÷ÈÄ ¸ñÇ¥ ÀûÀ» ³Ö¾îÁÖ´Â ÇÔ¼ö
+    // íƒ€ì›Œê°€ ê³µê²©í•  ëŒ€ìƒì„ ë„£ì–´ì£¼ëŠ” í•¨ìˆ˜
     public void SetTarget(Transform newTarget)
     {
         target = newTarget;
     }
 
-    void Update()
+    private void Update()
     {
-        // ¸ñÇ¥°¡ ¾øÀ¸¸é ÃÑ¾Ë »èÁ¦
+        // ëŒ€ìƒì´ ì‚¬ë¼ì¡Œìœ¼ë©´ ì´ì•Œ ì‚­ì œ
         if (target == null)
         {
             Destroy(gameObject);
             return;
         }
 
-        // ¸ñÇ¥ Àû À§Ä¡ °è»ê
         Vector3 targetPos = new Vector3(target.position.x, target.position.y, 0f);
 
-        // ¸ñÇ¥ ¹æÇâ °è»ê
         Vector3 dir = (targetPos - transform.position).normalized;
 
-        // ÃÑ¾ËÀÌ ÀÌµ¿ ¹æÇâÀ» ¹Ù¶óº¸µµ·Ï È¸Àü
+        // ì´ì•Œ ë°©í–¥ íšŒì „
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle);
 
-        // ÃÑ¾Ë ÀÌµ¿
+        // ì´ì•Œ ì´ë™
         transform.position = Vector3.MoveTowards(
             transform.position,
             targetPos,
             speed * Time.deltaTime
         );
 
-        // Àû¿¡ ÃæºĞÈ÷ °¡±î¿öÁö¸é µ¥¹ÌÁö Àû¿ë
-        if (Vector3.Distance(transform.position, targetPos) < 0.15f)
+        // ëª©í‘œ ì§€ì ì— ê°€ê¹Œì›Œì§€ë©´ ë°ë¯¸ì§€ ì²˜ë¦¬
+        if (Vector3.Distance(transform.position, targetPos) < hitDistance)
         {
-            EnemyHealth enemyHealth = target.GetComponent<EnemyHealth>();
-
-            if (enemyHealth != null)
-            {
-                enemyHealth.TakeDamage(damage);
-            }
-
-            // ÃÑ¾Ë »èÁ¦
-            Destroy(gameObject);
+            HitTarget();
         }
+    }
+
+    private void HitTarget()
+    {
+        if (target == null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        // 1ì°¨: target ì˜¤ë¸Œì íŠ¸ì—ì„œ EnemyHealth ì°¾ê¸°
+        EnemyHealth enemyHealth = target.GetComponent<EnemyHealth>();
+
+        // 2ì°¨: targetì˜ ë¶€ëª¨ì—ì„œ EnemyHealth ì°¾ê¸°
+        if (enemyHealth == null)
+        {
+            enemyHealth = target.GetComponentInParent<EnemyHealth>();
+        }
+
+        // 3ì°¨: targetì˜ ìì‹ì—ì„œ EnemyHealth ì°¾ê¸°
+        if (enemyHealth == null)
+        {
+            enemyHealth = target.GetComponentInChildren<EnemyHealth>();
+        }
+
+        if (enemyHealth != null)
+        {
+            enemyHealth.TakeDamage(damage);
+            Debug.Log("ì´ì•Œ ëª…ì¤‘! ë°ë¯¸ì§€: " + damage);
+        }
+        else
+        {
+            Debug.LogWarning("EnemyHealthë¥¼ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤. EnemyHealthê°€ ì  ì˜¤ë¸Œì íŠ¸ì— ë¶™ì–´ ìˆëŠ”ì§€ í™•ì¸í•˜ì„¸ìš”.");
+        }
+
+        Destroy(gameObject);
     }
 }

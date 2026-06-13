@@ -1,54 +1,57 @@
 using UnityEngine;
 
-// Å¸¿ö °ø°ÝÀ» ´ã´çÇÏ´Â ½ºÅ©¸³Æ®
+// Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½Å©ï¿½ï¿½Æ®
 public class TowerAttack : MonoBehaviour
 {
-    // °ø°Ý ¹üÀ§
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public float attackRange = 5f;
 
-    // °ø°Ý °£°Ý
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public float attackDelay = 0.5f;
 
-    // Æ÷½Å È¸Àü ¼Óµµ
+    // ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½Óµï¿½
     public float rotateSpeed = 5f;
 
-    // ¹ß»çÇÒ ÃÑ¾Ë ÇÁ¸®ÆÕ
+    // ï¿½ß»ï¿½ï¿½ï¿½ ï¿½Ñ¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public GameObject bulletPrefab;
 
-    // ÃÑ¾ËÀÌ »ý¼ºµÉ À§Ä¡
+    // ï¿½Ñ¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
     public Transform firePoint;
 
-    // Æ÷½Å ¿ÀºêÁ§Æ®
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     public Transform towerHead;
 
-    // °ø°Ý Å¸ÀÌ¸Ó
+    // ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½Ì¸ï¿½
     private float timer = 0f;
 
     void Update()
+{
+    timer += Time.deltaTime;
+
+    GameObject target = FindNearestEnemy();
+
+    if (target == null)
     {
-        // ½Ã°£ ´©Àû
-        timer += Time.deltaTime;
-
-        // °¡Àå °¡±î¿î Àû Ã£±â
-        GameObject target = FindNearestEnemy();
-
-        // ÀûÀÌ ÀÖÀ¸¸é Æ÷½Å È¸Àü + °ø°Ý
-        if (target != null)
-        {
-            RotateHeadToTarget(target.transform);
-
-            if (timer >= attackDelay)
-            {
-                Shoot(target.transform);
-                timer = 0f;
-            }
-        }
+        Debug.Log("íƒ€ì›Œê°€ ì ì„ ëª» ì°¾ëŠ” ì¤‘");
+        return;
     }
 
-    // ¹üÀ§ ¾ÈÀÇ °¡Àå °¡±î¿î ÀûÀ» Ã£´Â ÇÔ¼ö
+    Debug.Log("íƒ€ì›Œê°€ ì  ì°¾ìŒ: " + target.name);
+
+    RotateHeadToTarget(target.transform);
+
+    if (timer >= attackDelay)
+    {
+        Debug.Log("íƒ€ì›Œ ë°œì‚¬!");
+        Shoot(target.transform);
+        timer = 0f;
+    }
+}
+
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½Ô¼ï¿½
     GameObject FindNearestEnemy()
     {
-        // Enemy ÅÂ±×°¡ ºÙÀº ÀûµéÀ» ¸ðµÎ °¡Á®¿È
+        // Enemy ï¿½Â±×°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
         GameObject nearest = null;
@@ -58,7 +61,7 @@ public class TowerAttack : MonoBehaviour
         {
             float dist = Vector3.Distance(transform.position, enemy.transform.position);
 
-            // ¹üÀ§ ¾È¿¡ ÀÖÀ¸¸é¼­ ´õ °¡±î¿ì¸é °»½Å
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½È¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½é¼­ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             if (dist <= minDist)
             {
                 minDist = dist;
@@ -69,16 +72,16 @@ public class TowerAttack : MonoBehaviour
         return nearest;
     }
 
-    // ÃÑ¾Ë ¹ß»ç ÇÔ¼ö
+    // ï¿½Ñ¾ï¿½ ï¿½ß»ï¿½ ï¿½Ô¼ï¿½
     void Shoot(Transform target)
     {
-        // ¿¬°áÀÌ ¾È µÇ¾î ÀÖÀ¸¸é ¹ß»çÇÏÁö ¾ÊÀ½
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ç¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß»ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (bulletPrefab == null || firePoint == null) return;
 
-        // firePoint À§Ä¡¿¡¼­ ÃÑ¾Ë »ý¼º
+        // firePoint ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¾ï¿½ ï¿½ï¿½ï¿½ï¿½
         GameObject bulletObj = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
 
-        // »ý¼ºµÈ ÃÑ¾Ë¿¡ ¸ñÇ¥ Àû Àü´Þ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¾Ë¿ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         Bullet bullet = bulletObj.GetComponent<Bullet>();
         if (bullet != null)
         {
@@ -86,21 +89,21 @@ public class TowerAttack : MonoBehaviour
         }
     }
 
-    // Æ÷½Å¸¸ Àû ¹æÇâÀ¸·Î È¸Àü½ÃÅ°´Â ÇÔ¼ö
+    // ï¿½ï¿½ï¿½Å¸ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½Å°ï¿½ï¿½ ï¿½Ô¼ï¿½
     void RotateHeadToTarget(Transform target)
     {
         if (towerHead == null) return;
 
-        // Æ÷½Å ±âÁØÀ¸·Î Àû ¹æÇâ °è»ê
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         Vector3 dir = target.position - towerHead.position;
 
-        // °¢µµ °è»ê
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
-        // ¸ñÇ¥ È¸Àü°ª »ý¼º
+        // ï¿½ï¿½Ç¥ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         Quaternion targetRotation = Quaternion.Euler(0, 0, angle);
 
-        // Æ÷½Å¸¸ ºÎµå·´°Ô È¸Àü
+        // ï¿½ï¿½ï¿½Å¸ï¿½ ï¿½Îµå·´ï¿½ï¿½ È¸ï¿½ï¿½
         towerHead.rotation = Quaternion.Lerp(
             towerHead.rotation,
             targetRotation,
@@ -108,7 +111,7 @@ public class TowerAttack : MonoBehaviour
         );
     }
 
-    // Scene¿¡¼­ °ø°Ý ¹üÀ§¸¦ È®ÀÎÇÏ±â À§ÇÑ ¿ø Ç¥½Ã
+    // Sceneï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Ç¥ï¿½ï¿½
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
