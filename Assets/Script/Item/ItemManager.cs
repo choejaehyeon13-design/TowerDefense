@@ -117,7 +117,7 @@ public class ItemManager : MonoBehaviour
 
         foreach (var move in enemies)
         {
-            move.speed = Mathf.Max(0, move.speed -1);
+            move.speed = Mathf.Max(0, move.speed -1f);
         }
 
         yield return new WaitForSeconds(TimeSlowLast);
