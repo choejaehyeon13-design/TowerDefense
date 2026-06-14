@@ -34,7 +34,18 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        // maxLife가 0 이하이면 오류 방지를 위해 기본값 10으로 보정
+        if (maxLife <= 0)
+        {
+            maxLife = 10;
+        }
+
         life = maxLife;
+
+        if (lifeFillImage == null)
+        {
+            Debug.LogWarning("GameManager에 lifeFillImage가 연결되지 않았습니다. Fill 오브젝트의 Image를 넣어주세요.");
+        }
 
         UpdateUI();
 
@@ -79,12 +90,8 @@ public class GameManager : MonoBehaviour
 
         lastTakeLifeTime = Time.time;
 
-        life -= amount;
-
-        if (life < 0)
-        {
-            life = 0;
-        }
+        // life가 0보다 작아지거나 maxLife보다 커지지 않도록 제한
+        life = Mathf.Clamp(life - amount, 0, maxLife);
 
         UpdateUI();
 
@@ -92,6 +99,19 @@ public class GameManager : MonoBehaviour
         {
             GameOver();
         }
+    }
+
+    public void HealLife(int amount)
+    {
+        if (isGameOver)
+        {
+            return;
+        }
+
+        // 회복 기능이 필요할 때 사용 가능
+        life = Mathf.Clamp(life + amount, 0, maxLife);
+
+        UpdateUI();
     }
 
     public void UpdateUI()
@@ -108,7 +128,11 @@ public class GameManager : MonoBehaviour
 
         if (lifeFillImage != null)
         {
-            lifeFillImage.fillAmount = (float)life / maxLife;
+            // 체력 비율 계산
+            float lifeRatio = (float)life / maxLife;
+
+            // fillAmount는 0~1 사이 값만 사용
+            lifeFillImage.fillAmount = Mathf.Clamp01(lifeRatio);
         }
     }
 
@@ -116,13 +140,13 @@ public class GameManager : MonoBehaviour
     {
         isGameOver = true;
 
-
         Stage1ResultManager resultManager = FindObjectOfType<Stage1ResultManager>();
 
         if (resultManager != null)
         {
             resultManager.GoDefeat();
         }
+
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(true);
