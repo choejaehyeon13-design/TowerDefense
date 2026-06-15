@@ -101,14 +101,12 @@ public class ItemManager : MonoBehaviour
     Collider2D[] hits = Physics2D.OverlapCircleAll(pos, dragonRadius);
     foreach (var hit in hits)
     {
-        if (hit.CompareTag("Enemy"))
-        {
             EnemyHealth enemy = hit.GetComponent<EnemyHealth>();
             if (enemy != null)
             {
                 enemy.TakeDamage(dragonDamage);
             }
-        }
+        
     }
 }
     IEnumerator TimeSlow() //슬로우 사용
