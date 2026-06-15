@@ -69,7 +69,7 @@ public class ArcherTower : MonoBehaviour
         {
             animator.SetBool("isAttacking", false);
         }
-
+        currentTarget = null;
         isAttacking = false;
     }
 
